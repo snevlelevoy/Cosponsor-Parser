@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Congressional Representative Parser</title>
+    <title>Cosponsor Formatting Tool</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             max-width: 800px;
             margin: 2rem auto;
             padding: 0 1rem;
@@ -23,79 +23,77 @@
 
         textarea {
             width: 100%;
-            min-height: 200px;
-            margin: 1rem 0;
+            min-height: 150px;
             padding: 1rem;
+            margin-bottom: 1.5rem;
             border: 1px solid #ddd;
             border-radius: 4px;
-            font-family: inherit;
+            font-size: 1rem;
             resize: vertical;
         }
 
-        .output {
-            margin-top: 2rem;
-            font-size: 1.2rem;
+        #output {
+            white-space: pre-wrap;
+            font-family: monospace;
         }
 
         .highlight {
-            background-color: #ffff00;
+            background-color: yellow;
         }
 
         .italic {
             font-style: italic;
         }
-
-        @media (max-width: 600px) {
-            body {
-                margin: 1rem;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Congressional Representative Parser</h1>
-        <p>Paste congressional representative data below to extract and format last names:</p>
-        <textarea id="input" placeholder="Paste data in the format: Rep. Lastname, Firstname [Party-State-District] Date"></textarea>
-        <div class="output" id="output"></div>
+        <h1>Cosponsor Formatting Tool</h1>
+        <div style="margin-bottom: 1.5rem;">
+            <p>On congress.gov, go to the cosponsor tab of a bill page. Copy and paste the list of cosponsors here.</p>
+            <p><strong>Example:</strong><br>
+            Rep. Schneider, Bradley Scott [D-IL-10]*<br>
+            Rep. Carbajal, Salud O. [D-CA-24]*<br>
+            Rep. Barragán, Nanette Diaz [D-CA-44]*<br>
+            Rep. Bonamici, Suzanne [D-OR-1]*
+            </p>
+        </div>
+        <textarea id="input" placeholder="paste text here"></textarea>
+        <div id="output"></div>
     </div>
 
     <script>
         const input = document.getElementById('input');
         const output = document.getElementById('output');
 
-        function parseRepresentatives(text) {
-            const lines = text.trim().split('\n');
-            const names = [];
+        // Update output whenever input changes
+        input.addEventListener('input', updateOutput);
 
-            lines.forEach(line => {
-                const match = line.match(/^(Rep\.|Del\.\s)?\s*([\w\s-]+),/);
-                if (match) {
-                    const lastName = match[2].trim();
-                    const partyMatch = line.match(/\[(D-CA|R-)/);
-                    
-                    let formattedName = lastName;
-                    if (partyMatch) {
-                        if (partyMatch[1] === 'D-CA') {
-                            formattedName = `<span class="highlight">${lastName}</span>`;
-                        } else if (partyMatch[1] === 'R-') {
-                            formattedName = `<span class="italic">${lastName}</span>`;
-                        }
-                    }
-                    names.push(formattedName);
+        function updateOutput() {
+            const text = input.value;
+            const lines = text.split('\n').filter(line => line.trim());
+            
+            const formattedNames = lines.map(line => {
+                // Extract last name (part before comma after "Rep." or "Del.")
+                // Unicode-aware: match letters including accents
+                const match = line.match(/(Rep\.|Del\.)\s+([\p{L}.'’\- ]+),/u);
+                if (!match) return '';
+                
+                const lastName = match[2].trim();
+                
+                // Determine formatting based on party
+                if (line.includes('[D-CA')) {
+                    return `<span class="highlight">${lastName}</span>`;
+                } else if (line.includes('[R-')) {
+                    return `<span class="italic">${lastName}</span>`;
                 }
-            });
+                return lastName;
+            }).filter(name => name);
 
-            return names.join(', ');
+            // Join names with commas
+            const result = formattedNames.join(', ');
+            output.innerHTML = result || 'No names extracted yet';
         }
-
-        input.addEventListener('input', () => {
-            const result = parseRepresentatives(input.value);
-            output.innerHTML = result || '<em>No names found</em>';
-        });
-
-        // Initial focus
-        input.focus();
     </script>
 </body>
 </html>
