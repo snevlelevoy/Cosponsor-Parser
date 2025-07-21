@@ -3,99 +3,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Congressional Representative Parser</title>
+    <title>Cosponsor Formatting Tool</title>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-            line-height: 1.6;
-            color: #333;
+            font-family: system-ui, Arial, sans-serif;
+            background: #fafbfc;
+            color: #222;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
-
         .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 48px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 16px #0001;
+            padding: 2.5em 2em 2em 2em;
         }
-
+        h1 {
+            font-size: 2.1em;
+            margin: 0 0 0.7em 0;
+            text-align: center;
+        }
+        .instructions {
+            font-size: 1em;
+            color: #444;
+            margin-bottom: 1.5em;
+            background: #f6f6e7;
+            padding: 1em;
+            border-radius: 8px;
+            white-space: pre-line;
+        }
         textarea {
             width: 100%;
-            min-height: 200px;
-            margin: 1rem 0;
-            padding: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-family: inherit;
+            min-height: 180px;
+            font-size: 1.1em;
+            padding: 1em;
+            border-radius: 8px;
+            border: 1px solid #bbb;
+            margin-bottom: 1em;
             resize: vertical;
+            box-sizing: border-box;
         }
-
+        button {
+            display: block;
+            width: 100%;
+            font-size: 1.1em;
+            padding: 0.7em;
+            background: #2867c6;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 1.5em;
+        }
+        button:hover {
+            background: #184c90;
+        }
         .output {
-            margin-top: 2rem;
-            font-size: 1.2rem;
+            font-size: 1.2em;
+            margin-top: 1.5em;
+            word-break: break-word;
         }
-
-        .highlight {
-            background-color: #ffff00;
-        }
-
         .italic {
             font-style: italic;
         }
-
-        @media (max-width: 600px) {
-            body {
-                margin: 1rem;
-            }
+        .highlight {
+            background: yellow;
+            border-radius: 4px;
+        }
+        .highlight-section {
+            background: #f0f8ff;
+            padding: 1em;
+            border-radius: 8px;
+            margin-bottom: 1.5em;
+            border: 1px solid #ddd;
+        }
+        .dropdown-container {
+            display: flex;
+            gap: 1em;
+            margin-top: 0.5em;
+            flex-wrap: wrap;
+        }
+        .dropdown-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3em;
+        }
+        .dropdown-group label {
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        select {
+            padding: 0.5em;
+            border: 1px solid #bbb;
+            border-radius: 4px;
+            font-size: 1em;
+            min-width: 120px;
+        }
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.8em;
+            color: #666;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        }
+        .footer a {
+            color: #2867c6;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
+    <script src="https://cdn.counter.dev/script.js" data-id="91fcf8e8-fa60-40bf-851e-75466ee260b0" data-utcoffset="-4"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Congressional Representative Parser</h1>
-        <p>Paste congressional representative data below to extract and format last names:</p>
-        <textarea id="input" placeholder="Paste data in the format: Rep. Lastname, Firstname [Party-State-District] Date"></textarea>
+        <h1>Cosponsor Formatting Tool</h1>
+        <div class="instructions">
+            <strong>Instructions:</strong><br>
+            On <b>congress.gov</b>, go to the cosponsor tab of a bill page.<br>
+            Copy and paste the list of cosponsors here.<br><br>
+            <b>Example:</b><br>
+            <pre style="background:#f6f6e7;border-radius:6px;padding:0.7em 1em;font-size:1em;overflow-x:auto;">
+Rep. Bilirakis, Gus M. [R-FL-12]*	01/31/2025
+Rep. Frost, Maxwell [D-FL-10]*	01/31/2025
+Rep. Castor, Kathy [D-FL-14]*	01/31/2025
+            </pre>
+        </div>
+        
+        <div class="highlight-section">
+            <div style="margin-bottom: 0.5em;">If you would like co-signers from your party and state highlighted in yellow, select your party and state below. Otherwise, leave blank.</div>
+            <div class="dropdown-container">
+                <div class="dropdown-group">
+                    <label for="party-select">Party:</label>
+                    <select id="party-select">
+                        <option value="">Select Party</option>
+                        <option value="D">Democrat</option>
+                        <option value="R">Republican</option>
+                    </select>
+                </div>
+                <div class="dropdown-group">
+                    <label for="state-select">State:</label>
+                    <select id="state-select">
+                        <option value="">Select State</option>
+                        <option value="AL">Alabama (AL)</option>
+                        <option value="AK">Alaska (AK)</option>
+                        <option value="AS">American Samoa (AS)</option>
+                        <option value="AZ">Arizona (AZ)</option>
+                        <option value="AR">Arkansas (AR)</option>
+                        <option value="CA">California (CA)</option>
+                        <option value="CO">Colorado (CO)</option>
+                        <option value="CT">Connecticut (CT)</option>
+                        <option value="DE">Delaware (DE)</option>
+                        <option value="DC">District of Columbia (DC)</option>
+                        <option value="FL">Florida (FL)</option>
+                        <option value="GA">Georgia (GA)</option>
+                        <option value="GU">Guam (GU)</option>
+                        <option value="HI">Hawaii (HI)</option>
+                        <option value="ID">Idaho (ID)</option>
+                        <option value="IL">Illinois (IL)</option>
+                        <option value="IN">Indiana (IN)</option>
+                        <option value="IA">Iowa (IA)</option>
+                        <option value="KS">Kansas (KS)</option>
+                        <option value="KY">Kentucky (KY)</option>
+                        <option value="LA">Louisiana (LA)</option>
+                        <option value="ME">Maine (ME)</option>
+                        <option value="MD">Maryland (MD)</option>
+                        <option value="MA">Massachusetts (MA)</option>
+                        <option value="MI">Michigan (MI)</option>
+                        <option value="MN">Minnesota (MN)</option>
+                        <option value="MS">Mississippi (MS)</option>
+                        <option value="MO">Missouri (MO)</option>
+                        <option value="MT">Montana (MT)</option>
+                        <option value="NE">Nebraska (NE)</option>
+                        <option value="NV">Nevada (NV)</option>
+                        <option value="NH">New Hampshire (NH)</option>
+                        <option value="NJ">New Jersey (NJ)</option>
+                        <option value="NM">New Mexico (NM)</option>
+                        <option value="NY">New York (NY)</option>
+                        <option value="NC">North Carolina (NC)</option>
+                        <option value="ND">North Dakota (ND)</option>
+                        <option value="MP">Northern Mariana Islands (MP)</option>
+                        <option value="OH">Ohio (OH)</option>
+                        <option value="OK">Oklahoma (OK)</option>
+                        <option value="OR">Oregon (OR)</option>
+                        <option value="PA">Pennsylvania (PA)</option>
+                        <option value="PR">Puerto Rico (PR)</option>
+                        <option value="RI">Rhode Island (RI)</option>
+                        <option value="SC">South Carolina (SC)</option>
+                        <option value="SD">South Dakota (SD)</option>
+                        <option value="TN">Tennessee (TN)</option>
+                        <option value="TX">Texas (TX)</option>
+                        <option value="UT">Utah (UT)</option>
+                        <option value="VT">Vermont (VT)</option>
+                        <option value="VA">Virginia (VA)</option>
+                        <option value="VI">Virgin Islands (VI)</option>
+                        <option value="WA">Washington (WA)</option>
+                        <option value="WV">West Virginia (WV)</option>
+                        <option value="WI">Wisconsin (WI)</option>
+                        <option value="WY">Wyoming (WY)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <form id="cosponsor-form">
+            <textarea id="input" placeholder="Paste your cosponsor list here..."></textarea>
+            <button type="submit">Format Names</button>
+        </form>
         <div class="output" id="output"></div>
     </div>
-
     <script>
-        const input = document.getElementById('input');
-        const output = document.getElementById('output');
-
-        function parseRepresentatives(text) {
-            const lines = text.trim().split('\n');
-            const names = [];
-
-            lines.forEach(line => {
-                const match = line.match(/^(Rep\.|Del\.\s)?\s*([\w\s-]+),/);
-                if (match) {
-                    const lastName = match[2].trim();
-                    const partyMatch = line.match(/\[(D-CA|R-)/);
-                    
-                    let formattedName = lastName;
-                    if (partyMatch) {
-                        if (partyMatch[1] === 'D-CA') {
-                            formattedName = `<span class="highlight">${lastName}</span>`;
-                        } else if (partyMatch[1] === 'R-') {
-                            formattedName = `<span class="italic">${lastName}</span>`;
-                        }
-                    }
-                    names.push(formattedName);
+        function parseCongressGovEntries(text) {
+            const lines = text.replace(/\r/g, '').split('\n');
+            const entries = [];
+            
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed) continue;
+                
+                // Parse congress.gov format: "Rep. LastName, FirstName [Party-State-District]*\tDate"
+                // Example: "Rep. Bilirakis, Gus M. [R-FL-12]*\t01/31/2025"
+                const parts = trimmed.split('\t');
+                if (parts.length < 1) continue;
+                
+                const nameAndInfo = parts[0].trim();
+                
+                // Extract the name part (everything before the bracket)
+                const bracketIndex = nameAndInfo.indexOf('[');
+                if (bracketIndex === -1) continue;
+                
+                const namePart = nameAndInfo.substring(0, bracketIndex).trim();
+                const infoPart = nameAndInfo.substring(bracketIndex);
+                
+                // Remove "Rep." or "Sen." prefix and extract name
+                let cleanName = namePart.replace(/^(Rep\.|Sen\.)\s+/, '');
+                // Remove trailing asterisk if present
+                cleanName = cleanName.replace(/\*$/, '').trim();
+                
+                // Extract party and state from bracket info [R-FL-12]
+                const bracketMatch = infoPart.match(/\[([RD])-([A-Z]{2})-?.*?\]/);
+                let party = '';
+                let state = '';
+                if (bracketMatch) {
+                    party = bracketMatch[1];
+                    state = bracketMatch[2];
                 }
-            });
-
-            return names.join(', ');
+                
+                // Extract last name (everything before the first comma)
+                const lastName = cleanName.split(',')[0].trim();
+                
+                if (lastName) {
+                    entries.push({
+                        lastName,
+                        fullName: cleanName,
+                        party,
+                        state,
+                        originalLine: trimmed
+                    });
+                }
+            }
+            
+            return entries;
         }
 
-        input.addEventListener('input', () => {
-            const result = parseRepresentatives(input.value);
-            output.innerHTML = result || '<em>No names found</em>';
+        document.getElementById('cosponsor-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('input').value;
+            const entries = parseCongressGovEntries(input);
+            
+            // Get selected party and state from dropdowns for highlighting
+            const selectedParty = document.getElementById('party-select').value;
+            const selectedState = document.getElementById('state-select').value;
+            
+            const outputDiv = document.getElementById('output');
+            if (entries.length === 0) {
+                outputDiv.innerHTML = '<span style="color:#888">No valid names found.</span>';
+                return;
+            }
+            
+            // Sort alphabetically by last name
+            entries.sort((a, b) => a.lastName.localeCompare(b.lastName));
+            
+            // Count party affiliations
+            const democrats = entries.filter(e => e.party === 'D').length;
+            const republicans = entries.filter(e => e.party === 'R').length;
+            
+            // Generate output
+            let html = '';
+            
+            // Add cosponsor tally
+            if (democrats > 0 || republicans > 0) {
+                html += `<strong>(Cosponsors ${democrats}D, ${republicans}R):</strong> `;
+            }
+            
+            // Generate the alphabetized list of last names
+            const namesList = entries.map(entry => {
+                let name = entry.lastName;
+                
+                // Check if this entry should be highlighted
+                const shouldHighlight = selectedParty && selectedState && 
+                    entry.party === selectedParty && entry.state === selectedState;
+                
+                // Apply styling based on priority: highlight > italic
+                if (shouldHighlight) {
+                    name = `<span class="highlight">${name}</span>`;
+                } else if (entry.party === 'R') {
+                    name = `<span class="italic">${name}</span>`;
+                }
+                
+                return name;
+            }).join(', ');
+            
+            html += namesList;
+            outputDiv.innerHTML = html;
         });
-
-        // Initial focus
-        input.focus();
     </script>
+    
+    <div class="footer">
+        Created by Sophie Nevle Levoy. Reach out with feedback <a href="https://www.linkedin.com/in/sophia-nevle-levoy" target="_blank">here</a>.
+    </div>
+    
 </body>
 </html>
