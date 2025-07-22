@@ -70,11 +70,18 @@
             font-style: italic;
         }
         .highlight {
-            background: yellow;
+            background: #ffff00; /* Bright yellow for better visibility */
             border-radius: 4px;
         }
         .highlight-section {
-            background: #f0f8ff;
+            background: #f0f8ff; /* Light blue background */
+            padding: 1em;
+            border-radius: 8px;
+            margin-bottom: 1.5em;
+            border: 1px solid #ddd;
+        }
+        .highlight-section-yellow {
+            background: #fffacd; /* Light yellow background */
             padding: 1em;
             border-radius: 8px;
             margin-bottom: 1.5em;
@@ -138,8 +145,26 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
             </pre>
         </div>
         
+        <!-- Italics Section -->
         <div class="highlight-section">
-            <div style="margin-bottom: 0.5em;">If you would like co-signers from your party and state highlighted in yellow, select your party and state below. Otherwise, leave blank.</div>
+            <div style="font-weight: bold; margin-bottom: 0.5em;">Italics</div>
+            <div style="margin-bottom: 0.8em;">Select which party's names should be italicized:</div>
+            <div class="dropdown-container">
+                <div class="dropdown-group">
+                    <label for="italics-party-select">Italicize:</label>
+                    <select id="italics-party-select">
+                        <option value="">None</option>
+                        <option value="D">Democrats</option>
+                        <option value="R">Republicans</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Highlight Section -->
+        <div class="highlight-section-yellow">
+            <div style="font-weight: bold; margin-bottom: 0.5em;">Highlight</div>
+            <div style="margin-bottom: 0.8em;">If you would like co-signers from your party and state highlighted in light yellow, select your party and state below. Otherwise, leave blank.</div>
             <div class="dropdown-container">
                 <div class="dropdown-group">
                     <label for="party-select">Party:</label>
@@ -221,6 +246,47 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
         <div class="output" id="output"></div>
     </div>
     <script>
+        // Save settings to localStorage
+        function saveSettings() {
+            const settings = {
+                italicsParty: document.getElementById('italics-party-select').value,
+                highlightParty: document.getElementById('party-select').value,
+                highlightState: document.getElementById('state-select').value
+            };
+            localStorage.setItem('cosponsorToolSettings', JSON.stringify(settings));
+        }
+
+        // Load settings from localStorage
+        function loadSettings() {
+            try {
+                const settings = JSON.parse(localStorage.getItem('cosponsorToolSettings') || '{}');
+                if (settings.italicsParty) {
+                    document.getElementById('italics-party-select').value = settings.italicsParty;
+                }
+                if (settings.highlightParty) {
+                    document.getElementById('party-select').value = settings.highlightParty;
+                }
+                if (settings.highlightState) {
+                    document.getElementById('state-select').value = settings.highlightState;
+                }
+            } catch (e) {
+                console.error('Error loading settings:', e);
+                // Clear corrupted settings
+                localStorage.removeItem('cosponsorToolSettings');
+            }
+        }
+
+        // Add event listeners for saving settings when dropdowns change
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved settings
+            loadSettings();
+            
+            // Add change event listeners to all dropdowns
+            document.getElementById('italics-party-select').addEventListener('change', saveSettings);
+            document.getElementById('party-select').addEventListener('change', saveSettings);
+            document.getElementById('state-select').addEventListener('change', saveSettings);
+        });
+
         function parseCongressGovEntries(text) {
             const lines = text.replace(/\r/g, '').split('\n');
             const entries = [];
@@ -279,9 +345,10 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
             const input = document.getElementById('input').value;
             const entries = parseCongressGovEntries(input);
             
-            // Get selected party and state from dropdowns for highlighting
-            const selectedParty = document.getElementById('party-select').value;
-            const selectedState = document.getElementById('state-select').value;
+            // Get selected options from dropdowns
+            const italicsParty = document.getElementById('italics-party-select').value;
+            const highlightParty = document.getElementById('party-select').value;
+            const highlightState = document.getElementById('state-select').value;
             
             const outputDiv = document.getElementById('output');
             if (entries.length === 0) {
@@ -308,14 +375,15 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
             const namesList = entries.map(entry => {
                 let name = entry.lastName;
                 
-                // Check if this entry should be highlighted
-                const shouldHighlight = selectedParty && selectedState && 
-                    entry.party === selectedParty && entry.state === selectedState;
+                // Check if this entry should be highlighted or italicized
+                const shouldHighlight = highlightParty && highlightState && 
+                    entry.party === highlightParty && entry.state === highlightState;
+                const shouldItalicize = italicsParty && entry.party === italicsParty;
                 
                 // Apply styling based on priority: highlight > italic
                 if (shouldHighlight) {
                     name = `<span class="highlight">${name}</span>`;
-                } else if (entry.party === 'R') {
+                } else if (shouldItalicize) {
                     name = `<span class="italic">${name}</span>`;
                 }
                 
