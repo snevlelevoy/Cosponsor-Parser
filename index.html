@@ -5,109 +5,243 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosponsor Formatting Tool</title>
     <style>
-        body {
-            font-family: system-ui, Arial, sans-serif;
-            background: #fafbfc;
-            color: #222;
+        /* Avenir Next LT Pro Demi Font */
+        @font-face {
+            font-family: 'Avenir Next LT Pro Demi';
+            src: url('https://cdn.jsdelivr.net/npm/@fontsource/avenir-next-lt-pro@4.5.0/files/avenir-next-lt-pro-700-italic.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --primary-color: #16325C;
+            --secondary-color: #e2e8f0;
+            --accent-color: #4299e1;
+            --text-color: #16325C;
+            --section-bg: #DBE2F4;
+            --section-text: #6C6A89;
+            --border-color: #cbd5e0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 8px;
+            --transition: all 0.2s ease;
+        }
+        
+        /* Base styles */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
         }
-        .container {
-            max-width: 600px;
-            margin: 48px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 16px #0001;
-            padding: 2.5em 2em 2em 2em;
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
+        
+        /* Title styles */
         h1 {
-            font-size: 2.1em;
-            margin: 0 0 0.7em 0;
+            font-family: 'Avenir Next LT Pro Demi', Arial, sans-serif;
+            color: #16325C;
+            letter-spacing: 1px;
             text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
         }
-        .instructions {
-            font-size: 1em;
-            color: #444;
-            margin-bottom: 1.5em;
-            background: #f6f6e7;
-            padding: 1em;
-            border-radius: 8px;
-            white-space: pre-line;
-        }
-        textarea {
-            width: 100%;
-            min-height: 180px;
-            font-size: 1.1em;
-            padding: 1em;
-            border-radius: 8px;
-            border: 1px solid #bbb;
-            margin-bottom: 1em;
-            resize: vertical;
-            box-sizing: border-box;
-        }
-        button {
-            display: block;
-            width: 100%;
-            font-size: 1.1em;
-            padding: 0.7em;
-            background: #2867c6;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-bottom: 1.5em;
-        }
-        button:hover {
-            background: #184c90;
-        }
-        .output {
-            font-size: 1.2em;
-            margin-top: 1.5em;
-            word-break: break-word;
-        }
-        .italic {
-            font-style: italic;
-        }
-        .highlight {
-            background: #ffff00; /* Bright yellow for better visibility */
+        
+        /* Section headers */
+        .section-header {
+            font-family: 'Avenir Next LT Pro Demi', Arial, sans-serif;
+            color: #6C6A89;
+            background-color: #DBE2F4;
+            padding: 12px 20px;
+            margin: 20px 0 15px 0;
             border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .highlight-section {
-            background: #f0f8ff; /* Light blue background */
-            padding: 1em;
-            border-radius: 8px;
-            margin-bottom: 1.5em;
-            border: 1px solid #ddd;
+        
+        /* Subsection headers */
+        .option-label {
+            color: #6C6A89;
+            margin: 10px 0 5px 0;
+            display: block;
+            font-weight: bold;
         }
-        .highlight-section-yellow {
-            background: #fffacd; /* Light yellow background */
-            padding: 1em;
-            border-radius: 8px;
-            margin-bottom: 1.5em;
-            border: 1px solid #ddd;
+        
+        /* Form elements */
+        textarea, select {
+            font-family: 'Times New Roman', Times, serif;
+            color: #16325C;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px 12px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        /* Output area */
+        .output {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12px;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 15px;
+            min-height: 100px;
+            white-space: pre-wrap;
+            margin-top: 10px;
+        }
+        
+        /* Buttons */
+        button {
+            background-color: #16325C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Avenir Next LT Pro Demi', Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: #f1f5f9;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        h1 {
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+        
+        /* Section Styles */
+        .section {
+            background: var(--bg-section);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .no-collapse .section-header {
+            cursor: default;
+            padding-left: 1.5rem;
+        }
+        
+        .no-collapse .section-header::before {
+            display: none;
+        }
+        
+        .section-header {
+            padding: 1rem 1.5rem;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            user-select: none;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .section-header::before {
+            content: '▼';
+            font-size: 0.7em;
+            transition: var(--transition);
+            opacity: 0.6;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .section-header.collapsed::before {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+        
+        .section-content {
+            padding: 1.5rem;
+        }
+        
+        .section-content.collapsed {
+            display: none;
         }
         .dropdown-container {
             display: flex;
-            gap: 1em;
-            margin-top: 0.5em;
+            gap: 1rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
+        
         .dropdown-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3em;
+            flex: 1;
+            min-width: 200px;
         }
+        
         .dropdown-group label {
-            font-weight: bold;
-            font-size: 0.9em;
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         }
-        select {
-            padding: 0.5em;
-            border: 1px solid #bbb;
+        
+        .dropdown-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            font-size: 1em;
-            min-width: 120px;
+            background-color: white;
+            font-size: 0.9rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: var(--text);
+        }
+        
+        .dropdown-group select option {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: var(--text);
+            padding: 8px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
         }
         .footer {
             position: fixed;
@@ -127,152 +261,359 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        
+        /* Formatting styles */
+        .highlight {
+            background-color: #ffff00; /* Bright yellow */
+            padding: 0 2px;
+            border-radius: 3px;
+            font-weight: 500; /* Slightly bolder text for better contrast */
+        }
+        
+        .italic {
+            font-style: italic;
+        }
     </style>
     <script src="https://cdn.counter.dev/script.js" data-id="91fcf8e8-fa60-40bf-851e-75466ee260b0" data-utcoffset="-4"></script>
 </head>
 <body>
     <div class="container">
         <h1>Cosponsor Formatting Tool</h1>
-        <div class="instructions">
-            <strong>Instructions:</strong><br>
-            On <b>congress.gov</b>, go to the cosponsor tab of a bill page.<br>
-            Copy and paste the list of cosponsors here.<br><br>
-            <b>Example:</b><br>
-            <pre style="background:#f6f6e7;border-radius:6px;padding:0.7em 1em;font-size:1em;overflow-x:auto;">
-Rep. Bilirakis, Gus M. [R-FL-12]*	01/31/2025
+        
+        <!-- Instructions Section -->
+        <div class="section">
+            <div class="section-header">Instructions</div>
+            <div class="section-content">
+                <div class="instructions">
+                    <p>On <b>congress.gov</b>, go to the cosponsor tab of a bill page and copy the list of cosponsors.</p>
+                    <p><b>Example format:</b></p>
+                    <pre style="background:#f1f5f9;padding:0.75rem;border-radius:4px;font-size:0.9em;overflow-x:auto;margin:0.5rem 0 0;">Rep. Bilirakis, Gus M. [R-FL-12]*	01/31/2025
 Rep. Frost, Maxwell [D-FL-10]*	01/31/2025
-Rep. Castor, Kathy [D-FL-14]*	01/31/2025
-            </pre>
-        </div>
-        
-        <!-- Italics Section -->
-        <div class="highlight-section">
-            <div style="font-weight: bold; margin-bottom: 0.5em;">Italics</div>
-            <div style="margin-bottom: 0.8em;">Select which party's names should be italicized:</div>
-            <div class="dropdown-container">
-                <div class="dropdown-group">
-                    <label for="italics-party-select">Italicize:</label>
-                    <select id="italics-party-select">
-                        <option value="">None</option>
-                        <option value="D">Democrats</option>
-                        <option value="R">Republicans</option>
-                    </select>
+Rep. Castor, Kathy [D-FL-14]*	01/31/2025</pre>
                 </div>
             </div>
         </div>
         
-        <!-- Highlight Section -->
-        <div class="highlight-section-yellow">
-            <div style="font-weight: bold; margin-bottom: 0.5em;">Highlight</div>
-            <div style="margin-bottom: 0.8em;">If you would like co-signers from your party and state highlighted in light yellow, select your party and state below. Otherwise, leave blank.</div>
-            <div class="dropdown-container">
-                <div class="dropdown-group">
-                    <label for="party-select">Party:</label>
-                    <select id="party-select">
-                        <option value="">Select Party</option>
-                        <option value="D">Democrat</option>
-                        <option value="R">Republican</option>
-                    </select>
+        <!-- Formatting Options Section -->
+        <div class="section">
+            <div class="section-header">Formatting Options</div>
+            <div class="section-content">
+                <!-- Italics Section -->
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-top: 0;color:#2d3748;font-size:1rem;font-style:italic;">Italics</h3>
+                    <p style="margin-top:0;color:#4a5568;font-size:0.9rem;">Select which party's names should be italicized:</p>
+                    <div class="dropdown-container">
+                        <div class="dropdown-group">
+                            <label for="italics-party-select">Italicize:</label>
+                            <select id="italics-party-select">
+                                <option value="">None</option>
+                                <option value="D">Democrats</option>
+                                <option value="R">Republicans</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="dropdown-group">
-                    <label for="state-select">State:</label>
-                    <select id="state-select">
-                        <option value="">Select State</option>
-                        <option value="AL">Alabama (AL)</option>
-                        <option value="AK">Alaska (AK)</option>
-                        <option value="AS">American Samoa (AS)</option>
-                        <option value="AZ">Arizona (AZ)</option>
-                        <option value="AR">Arkansas (AR)</option>
-                        <option value="CA">California (CA)</option>
-                        <option value="CO">Colorado (CO)</option>
-                        <option value="CT">Connecticut (CT)</option>
-                        <option value="DE">Delaware (DE)</option>
-                        <option value="DC">District of Columbia (DC)</option>
-                        <option value="FL">Florida (FL)</option>
-                        <option value="GA">Georgia (GA)</option>
-                        <option value="GU">Guam (GU)</option>
-                        <option value="HI">Hawaii (HI)</option>
-                        <option value="ID">Idaho (ID)</option>
-                        <option value="IL">Illinois (IL)</option>
-                        <option value="IN">Indiana (IN)</option>
-                        <option value="IA">Iowa (IA)</option>
-                        <option value="KS">Kansas (KS)</option>
-                        <option value="KY">Kentucky (KY)</option>
-                        <option value="LA">Louisiana (LA)</option>
-                        <option value="ME">Maine (ME)</option>
-                        <option value="MD">Maryland (MD)</option>
-                        <option value="MA">Massachusetts (MA)</option>
-                        <option value="MI">Michigan (MI)</option>
-                        <option value="MN">Minnesota (MN)</option>
-                        <option value="MS">Mississippi (MS)</option>
-                        <option value="MO">Missouri (MO)</option>
-                        <option value="MT">Montana (MT)</option>
-                        <option value="NE">Nebraska (NE)</option>
-                        <option value="NV">Nevada (NV)</option>
-                        <option value="NH">New Hampshire (NH)</option>
-                        <option value="NJ">New Jersey (NJ)</option>
-                        <option value="NM">New Mexico (NM)</option>
-                        <option value="NY">New York (NY)</option>
-                        <option value="NC">North Carolina (NC)</option>
-                        <option value="ND">North Dakota (ND)</option>
-                        <option value="MP">Northern Mariana Islands (MP)</option>
-                        <option value="OH">Ohio (OH)</option>
-                        <option value="OK">Oklahoma (OK)</option>
-                        <option value="OR">Oregon (OR)</option>
-                        <option value="PA">Pennsylvania (PA)</option>
-                        <option value="PR">Puerto Rico (PR)</option>
-                        <option value="RI">Rhode Island (RI)</option>
-                        <option value="SC">South Carolina (SC)</option>
-                        <option value="SD">South Dakota (SD)</option>
-                        <option value="TN">Tennessee (TN)</option>
-                        <option value="TX">Texas (TX)</option>
-                        <option value="UT">Utah (UT)</option>
-                        <option value="VT">Vermont (VT)</option>
-                        <option value="VA">Virginia (VA)</option>
-                        <option value="VI">Virgin Islands (VI)</option>
-                        <option value="WA">Washington (WA)</option>
-                        <option value="WV">West Virginia (WV)</option>
-                        <option value="WI">Wisconsin (WI)</option>
-                        <option value="WY">Wyoming (WY)</option>
-                    </select>
+                
+                <!-- Highlight Section -->
+                <div style="margin-bottom: 1.5rem;padding-top: 1.5rem;border-top: 1px solid #edf2f7;">
+                    <h3 style="margin-top: 0;color:#2d3748;font-size:1rem;background-color:#fffbdd;display:inline-block;padding:0.25rem 0.5rem;border-radius:4px;">Highlights</h3>
+                    <p style="margin-top:0.75rem;color:#4a5568;font-size:0.9rem;">Highlight co-signers from your party and state:</p>
+                    <div class="dropdown-container">
+                        <div class="dropdown-group">
+                            <label for="party-select">Party:</label>
+                            <select id="party-select">
+                                <option value="">Select Party</option>
+                                <option value="D">Democrat</option>
+                                <option value="R">Republican</option>
+                            </select>
+                        </div>
+                        <div class="dropdown-group">
+                            <label for="state-select">State:</label>
+                            <select id="state-select">
+                                <option value="">Select State</option>
+                                <option value="AL">Alabama (AL)</option>
+                                <option value="AK">Alaska (AK)</option>
+                                <option value="AZ">Arizona (AZ)</option>
+                                <option value="AR">Arkansas (AR)</option>
+                                <option value="CA">California (CA)</option>
+                                <option value="CO">Colorado (CO)</option>
+                                <option value="CT">Connecticut (CT)</option>
+                                <option value="DE">Delaware (DE)</option>
+                                <option value="FL">Florida (FL)</option>
+                                <option value="GA">Georgia (GA)</option>
+                                <option value="HI">Hawaii (HI)</option>
+                                <option value="ID">Idaho (ID)</option>
+                                <option value="IL">Illinois (IL)</option>
+                                <option value="IN">Indiana (IN)</option>
+                                <option value="IA">Iowa (IA)</option>
+                                <option value="KS">Kansas (KS)</option>
+                                <option value="KY">Kentucky (KY)</option>
+                                <option value="LA">Louisiana (LA)</option>
+                                <option value="ME">Maine (ME)</option>
+                                <option value="MD">Maryland (MD)</option>
+                                <option value="MA">Massachusetts (MA)</option>
+                                <option value="MI">Michigan (MI)</option>
+                                <option value="MN">Minnesota (MN)</option>
+                                <option value="MS">Mississippi (MS)</option>
+                                <option value="MO">Missouri (MO)</option>
+                                <option value="MT">Montana (MT)</option>
+                                <option value="NE">Nebraska (NE)</option>
+                                <option value="NV">Nevada (NV)</option>
+                                <option value="NH">New Hampshire (NH)</option>
+                                <option value="NJ">New Jersey (NJ)</option>
+                                <option value="NM">New Mexico (NM)</option>
+                                <option value="NY">New York (NY)</option>
+                                <option value="NC">North Carolina (NC)</option>
+                                <option value="ND">North Dakota (ND)</option>
+                                <option value="OH">Ohio (OH)</option>
+                                <option value="OK">Oklahoma (OK)</option>
+                                <option value="OR">Oregon (OR)</option>
+                                <option value="PA">Pennsylvania (PA)</option>
+                                <option value="RI">Rhode Island (RI)</option>
+                                <option value="SC">South Carolina (SC)</option>
+                                <option value="SD">South Dakota (SD)</option>
+                                <option value="TN">Tennessee (TN)</option>
+                                <option value="TX">Texas (TX)</option>
+                                <option value="UT">Utah (UT)</option>
+                                <option value="VT">Vermont (VT)</option>
+                                <option value="VA">Virginia (VA)</option>
+                                <option value="WA">Washington (WA)</option>
+                                <option value="WV">West Virginia (WV)</option>
+                                <option value="WI">Wisconsin (WI)</option>
+                                <option value="WY">Wyoming (WY)</option>
+                                <option value="">---</option>
+                                <option value="AS">American Samoa (AS)</option>
+                                <option value="DC">District of Columbia (DC)</option>
+                                <option value="GU">Guam (GU)</option>
+                                <option value="MP">Northern Mariana Islands (MP)</option>
+                                <option value="PR">Puerto Rico (PR)</option>
+                                <option value="VI">U.S. Virgin Islands (VI)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Duplicate Names Section -->
+                <div style="margin-bottom: 0.5rem;padding-top: 1.5rem;border-top: 1px solid #edf2f7;">
+                    <h3 style="margin-top: 0;color:#2d3748;font-size:1rem;">Duplicate Names</h3>
+                    <p style="margin-top:0;color:#4a5568;font-size:0.9rem;">Select how you would like duplicate names to appear in your memo:</p>
+                    <div class="dropdown-container">
+                        <div class="dropdown-group">
+                            <label for="duplicate-format-select">Name Formatting:</label>
+                            <select id="duplicate-format-select">
+                                <option value="last">Last Name (e.g., Biggs)</option>
+                                <option value="initial">First Initial + Last Name (e.g., S. Biggs)</option>
+                                <option value="full">First Name + Last Name (e.g., Sheri Biggs)</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <form id="cosponsor-form">
-            <textarea id="input" placeholder="Paste your cosponsor list here..."></textarea>
-            <button type="submit">Format Names</button>
-        </form>
-        <div class="output" id="output"></div>
+        <!-- Combined Input/Output Section -->
+        <div class="section no-collapse">
+            <div class="section-header">Cosponsor List & Formatted Output</div>
+            <div class="section-content">
+                <form id="cosponsor-form" style="margin-bottom: 1.5rem;">
+                    <label for="input" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-light);">Paste your cosponsor list:</label>
+                    <textarea id="input" placeholder="Rep. LastName, FirstName [X-XX]..." style="width: 100%; min-height: 120px; margin-bottom: 1rem;"></textarea>
+                    <button type="submit" style="margin: 0 auto; display: block;">Format Names</button>
+                </form>
+                
+                <div style="margin-top: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-light);">Formatted Output:</label>
+                    <div class="output" id="output" style="min-height: 100px; border: 1px solid var(--border); border-radius: 6px; padding: 1rem; background: white;">
+                        <div style="color:#a0aec0;text-align:center;padding:1.5rem 0;">
+                            Your formatted list will appear here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
+        // Format name based on duplicate format selection
+        function formatName(entry, format) {
+            if (!entry) return '';
+            
+            switch(format) {
+                case 'last':
+                    return entry.lastName || '';
+                case 'initial':
+                    const firstName = entry.firstName || '';
+                    return (firstName ? firstName.charAt(0) + '. ' : '') + (entry.lastName || '');
+                case 'full':
+                default:
+                    return [(entry.firstName || ''), (entry.lastName || '')].filter(Boolean).join(' ');
+            }
+        }
+
+        // Check if a name is in the duplicates list
+        function isDuplicateName(entry) {
+            if (!entry || !entry.firstName || !entry.lastName) return false;
+            
+            const entryFirstName = entry.firstName.toLowerCase();
+            const entryLastName = entry.lastName.toLowerCase();
+            
+            return DUPLICATES_LIST.some(duplicate => {
+                return entryFirstName === duplicate.firstName.toLowerCase() && 
+                       entryLastName === duplicate.lastName.toLowerCase();
+            });
+        }
+
+        // Predefined list of duplicate names (first and last name)
+        const DUPLICATES_LIST = [
+            { firstName: 'Andy', lastName: 'Biggs' },
+            { firstName: 'Gus', lastName: 'Bilirakis' },
+            { firstName: 'Vern', lastName: 'Buchanan' },
+            { firstName: 'Michael', lastName: 'Burgess' },
+            { firstName: 'John', lastName: 'Carter' },
+            { firstName: 'Buddy', lastName: 'Carter' },
+            { firstName: 'Steve', lastName: 'Chabot' },
+            { firstName: 'James', lastName: 'Clyburn' },
+            { firstName: 'Tom', lastName: 'Cole' },
+            { firstName: 'Jim', lastName: 'Costa' },
+            { firstName: 'Dan', lastName: 'Crenshaw' },
+            { firstName: 'John', lastName: 'Curtis' },
+            { firstName: 'Rodney', lastName: 'Davis' },
+            { firstName: 'Mario', lastName: 'Diaz-Balart' },
+            { firstName: 'Jeff', lastName: 'Duncan' },
+            { firstName: 'Neal', lastName: 'Dunn' },
+            { firstName: 'Jake', lastName: 'Ellzey' },
+            { firstName: 'Drew', lastName: 'Ferguson' },
+            { firstName: 'Brian', lastName: 'Fitzpatrick' },
+            { firstName: 'Chuck', lastName: 'Fleischmann' },
+            { firstName: 'Mike', lastName: 'Gallagher' },
+            { firstName: 'Andrew', lastName: 'Garbarino' },
+            { firstName: 'Bob', lastName: 'Gibbs' },
+            { firstName: 'Anthony', lastName: 'Gonzalez' },
+            { firstName: 'Kay', lastName: 'Granger' },
+            { firstName: 'Sam', lastName: 'Graves' },
+            { firstName: 'Brett', lastName: 'Guthrie' },
+            { firstName: 'Andy', lastName: 'Harris' },
+            { firstName: 'Vicky', lastName: 'Hartzler' },
+            { firstName: 'Jaime', lastName: 'Herrera Beutler' },
+            { firstName: 'French', lastName: 'Hill' },
+            { firstName: 'Richard', lastName: 'Hudson' },
+            { firstName: 'Bill', lastName: 'Johnson' },
+            { firstName: 'Mike', lastName: 'Johnson' },
+            { firstName: 'David', lastName: 'Joyce' },
+            { firstName: 'John', lastName: 'Joyce' },
+            { firstName: 'Trent', lastName: 'Kelly' },
+            { firstName: 'Mike', lastName: 'Kelly' },
+            { firstName: 'David', lastName: 'Kustoff' },
+            { firstName: 'Darin', lastName: 'LaHood' },
+            { firstName: 'Doug', lastName: 'Lamborn' },
+            { firstName: 'Bob', lastName: 'Latta' },
+            { firstName: 'Jake', lastName: 'LaTurner' },
+            { firstName: 'Billy', lastName: 'Long' },
+            { firstName: 'Frank', lastName: 'Lucas' },
+            { firstName: 'Blaine', lastName: 'Luetkemeyer' },
+            { firstName: 'Kenny', lastName: 'Marchant' },
+            { firstName: 'Michael', lastName: 'McCaul' },
+            { firstName: 'Tom', lastName: 'McClintock' },
+            { firstName: 'Patrick', lastName: 'McHenry' },
+            { firstName: 'David', lastName: 'McKinley' },
+            { firstName: 'Cathy', lastName: 'McMorris Rodgers' },
+            { firstName: 'Peter', lastName: 'Meijer' },
+            { firstName: 'John', lastName: 'Moolenaar' },
+            { firstName: 'Alex', lastName: 'Mooney' },
+            { firstName: 'Blake', lastName: 'Moore' },
+            { firstName: 'Markwayne', lastName: 'Mullin' },
+            { firstName: 'Greg', lastName: 'Pence' },
+            { firstName: 'Scott', lastName: 'Perry' },
+            { firstName: 'August', lastName: 'Pfluger' },
+            { firstName: 'Bill', lastName: 'Posey' },
+            { firstName: 'Mike', lastName: 'Rogers' },
+            { firstName: 'Hal', lastName: 'Rogers' },
+            { firstName: 'John', lastName: 'Rose' },
+            { firstName: 'David', lastName: 'Rouzer' },
+            { firstName: 'John', lastName: 'Rutherford' },
+            { firstName: 'Steve', lastName: 'Scalise' },
+            { firstName: 'Austin', lastName: 'Scott' },
+            { firstName: 'Mike', lastName: 'Simpson' },
+            { firstName: 'Adrian', lastName: 'Smith' },
+            { firstName: 'Jason', lastName: 'Smith' },
+            { firstName: 'Pete', lastName: 'Stauber' },
+            { firstName: 'Bryan', lastName: 'Steil' },
+            { firstName: 'Glenn', lastName: 'Thompson' },
+            { firstName: 'Mike', lastName: 'Turner' },
+            { firstName: 'Fred', lastName: 'Upton' },
+            { firstName: 'Tim', lastName: 'Walberg' },
+            { firstName: 'Michael', lastName: 'Waltz' },
+            { firstName: 'Randy', lastName: 'Weber' },
+            { firstName: 'Brad', lastName: 'Wenstrup' },
+            { firstName: 'Bruce', lastName: 'Westerman' },
+            { firstName: 'Joe', lastName: 'Wilson' },
+            { firstName: 'Robert', lastName: 'Wittman' },
+            { firstName: 'Steve', lastName: 'Womack' },
+            { firstName: 'Don', lastName: 'Young' },
+            { firstName: 'Lee', lastName: 'Zeldin' }
+        ];
+
         // Save settings to localStorage
         function saveSettings() {
-            const settings = {
-                italicsParty: document.getElementById('italics-party-select').value,
-                highlightParty: document.getElementById('party-select').value,
-                highlightState: document.getElementById('state-select').value
-            };
-            localStorage.setItem('cosponsorToolSettings', JSON.stringify(settings));
+            try {
+                const settings = {
+                    italicsParty: document.getElementById('italics-party-select').value,
+                    highlightParty: document.getElementById('party-select').value,
+                    highlightState: document.getElementById('state-select').value,
+                    duplicateFormat: document.getElementById('duplicate-format-select').value,
+                    // Save collapsed state of sections
+                    collapsedSections: {
+                        instructions: document.querySelector('.section:not(.no-collapse) .section-header').classList.contains('collapsed'),
+                        formattingOptions: document.querySelectorAll('.section:not(.no-collapse) .section-header')[1].classList.contains('collapsed')
+                    }
+                };
+                localStorage.setItem('cosponsorFormatterSettings', JSON.stringify(settings));
+            } catch (e) {
+                console.error('Error saving settings:', e);
+            }
         }
 
         // Load settings from localStorage
         function loadSettings() {
             try {
-                const settings = JSON.parse(localStorage.getItem('cosponsorToolSettings') || '{}');
-                if (settings.italicsParty) {
-                    document.getElementById('italics-party-select').value = settings.italicsParty;
-                }
-                if (settings.highlightParty) {
-                    document.getElementById('party-select').value = settings.highlightParty;
-                }
-                if (settings.highlightState) {
-                    document.getElementById('state-select').value = settings.highlightState;
+                const savedSettings = localStorage.getItem('cosponsorFormatterSettings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    if (settings.italicsParty) document.getElementById('italics-party-select').value = settings.italicsParty;
+                    if (settings.highlightParty) document.getElementById('party-select').value = settings.highlightParty;
+                    if (settings.highlightState) document.getElementById('state-select').value = settings.highlightState;
+                    if (settings.duplicateFormat) document.getElementById('duplicate-format-select').value = settings.duplicateFormat;
+                    
+                    // Load collapsed state of sections
+                    if (settings.collapsedSections) {
+                        const sections = document.querySelectorAll('.section:not(.no-collapse)');
+                        if (sections[0]) {
+                            const header = sections[0].querySelector('.section-header');
+                            const content = sections[0].querySelector('.section-content');
+                            if (settings.collapsedSections.instructions) {
+                                header.classList.add('collapsed');
+                                content.classList.add('collapsed');
+                            } else {
+                                header.classList.remove('collapsed');
+                                content.classList.remove('collapsed');
+                            }
+                        }
+                        if (sections[1]) {
+                            const header = sections[1].querySelector('.section-header');
+                            const content = sections[1].querySelector('.section-content');
+                            if (settings.collapsedSections.formattingOptions) {
+                                header.classList.add('collapsed');
+                                content.classList.add('collapsed');
+                            } else {
+                                header.classList.remove('collapsed');
+                                content.classList.remove('collapsed');
+                            }
+                        }
+                    }
                 }
             } catch (e) {
                 console.error('Error loading settings:', e);
                 // Clear corrupted settings
-                localStorage.removeItem('cosponsorToolSettings');
+                localStorage.removeItem('cosponsorFormatterSettings');
             }
         }
 
@@ -285,6 +626,7 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
             document.getElementById('italics-party-select').addEventListener('change', saveSettings);
             document.getElementById('party-select').addEventListener('change', saveSettings);
             document.getElementById('state-select').addEventListener('change', saveSettings);
+            document.getElementById('duplicate-format-select').addEventListener('change', saveSettings);
         });
 
         function parseCongressGovEntries(text) {
@@ -323,12 +665,15 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
                     state = bracketMatch[2];
                 }
                 
-                // Extract last name (everything before the first comma)
-                const lastName = cleanName.split(',')[0].trim();
+                // Extract name parts
+                const nameParts = cleanName.split(',');
+                const lastName = nameParts[0].trim();
+                const firstName = nameParts[1]?.trim() || '';
                 
                 if (lastName) {
                     entries.push({
                         lastName,
+                        firstName,
                         fullName: cleanName,
                         party,
                         state,
@@ -340,59 +685,144 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
             return entries;
         }
 
+
+        
+        // Initialize the page
+        // Set up form submission
         document.getElementById('cosponsor-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const input = document.getElementById('input').value;
-            const entries = parseCongressGovEntries(input);
             
-            // Get selected options from dropdowns
-            const italicsParty = document.getElementById('italics-party-select').value;
-            const highlightParty = document.getElementById('party-select').value;
-            const highlightState = document.getElementById('state-select').value;
+            console.log('Form submitted'); // Debug log
+            const inputText = document.getElementById('input').value.trim();
+            const outputElement = document.querySelector('.output'); // Changed to use class selector
             
-            const outputDiv = document.getElementById('output');
-            if (entries.length === 0) {
-                outputDiv.innerHTML = '<span style="color:#888">No valid names found.</span>';
+            console.log('Input text:', inputText); // Debug log
+            
+            if (!inputText) {
+                console.log('No input text'); // Debug log
+                outputElement.innerHTML = '<div style="color:#e53e3e;text-align:center;padding:1rem;">Please enter some text to format.</div>';
                 return;
             }
             
-            // Sort alphabetically by last name
-            entries.sort((a, b) => a.lastName.localeCompare(b.lastName));
+            const entries = parseCongressGovEntries(inputText);
+            console.log('Parsed entries:', entries); // Debug log
             
-            // Count party affiliations
-            const democrats = entries.filter(e => e.party === 'D').length;
-            const republicans = entries.filter(e => e.party === 'R').length;
-            
-            // Generate output
-            let html = '';
-            
-            // Add cosponsor tally
-            if (democrats > 0 || republicans > 0) {
-                html += `<strong>(Cosponsors ${democrats}D, ${republicans}R):</strong> `;
+            if (!entries || entries.length === 0) {
+                console.log('No valid entries found'); // Debug log
+                outputElement.innerHTML = '<div style="color:#e53e3e;text-align:center;padding:1rem;">No valid entries found. Please check your input format.</div>';
+                return;
             }
             
-            // Generate the alphabetized list of last names
-            const namesList = entries.map(entry => {
-                let name = entry.lastName;
+            const highlightParty = document.getElementById('party-select').value;
+            const highlightState = document.getElementById('state-select').value;
+            const italicsParty = document.getElementById('italics-party-select').value;
+            
+            console.log('Highlight party/state:', highlightParty, highlightState); // Debug log
+            console.log('Italics party:', italicsParty); // Debug log
+            
+            const formatted = formatNamesGrouped(entries, highlightParty, highlightState, italicsParty);
+            console.log('Formatted output:', formatted); // Debug log
+            
+            outputElement.innerHTML = formatted || '<div style="color:#4a5568;text-align:center;padding:1rem;">No results to display.</div>';
+            
+            // Save settings
+            saveSettings();
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved settings
+            loadSettings();
+            
+            // Set up event listeners for settings changes
+            const settingsInputs = [
+                'italics-party-select',
+                'duplicate-format-select',
+                'party-select',
+                'state-select'
+            ];
+            
+            settingsInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', saveSettings);
+                }
+            });
+            
+            // Set up collapsible sections
+            const sections = document.querySelectorAll('.section:not(.no-collapse)');
+            sections.forEach((section) => {
+                const header = section.querySelector('.section-header');
+                const content = section.querySelector('.section-content');
+                
+                if (header && content) {
+                    // Add click handler
+                    header.addEventListener('click', () => {
+                        header.classList.toggle('collapsed');
+                        content.classList.toggle('collapsed');
+                        // Save the new state
+                        saveSettings();
+                    });
+                }
+            });
+            
+            // Focus the input field when the page loads
+            const inputField = document.getElementById('input');
+            if (inputField) {
+                inputField.focus();
+            }
+        });
+        
+        // Format names in a flat, comma-separated list
+        function formatNamesGrouped(entries, highlightParty, highlightState, italicsParty) {
+            if (!entries || entries.length === 0) return 'No valid names to display.';
+            
+            // Sort entries by last name
+            const sortedEntries = [...entries].sort((a, b) => a.lastName.localeCompare(b.lastName));
+            
+            // Count party affiliations
+            const democrats = sortedEntries.filter(e => e.party === 'D').length;
+            const republicans = sortedEntries.filter(e => e.party === 'R').length;
+            
+            // Generate the list of formatted names
+            const formattedNames = sortedEntries.map(entry => {
+                if (!entry || !entry.lastName) return '';
+                
+                // Check if this is a duplicate name that needs special formatting
+                const isDuplicate = isDuplicateName(entry);
+                let displayName = isDuplicate ? 
+                    formatName(entry, document.getElementById('duplicate-format-select')?.value || 'last') : 
+                    entry.lastName;
                 
                 // Check if this entry should be highlighted or italicized
                 const shouldHighlight = highlightParty && highlightState && 
-                    entry.party === highlightParty && entry.state === highlightState;
+                                     entry.party === highlightParty && 
+                                     entry.state === highlightState;
                 const shouldItalicize = italicsParty && entry.party === italicsParty;
                 
                 // Apply styling based on priority: highlight > italic
                 if (shouldHighlight) {
-                    name = `<span class="highlight">${name}</span>`;
+                    return `<span class="highlight">${displayName}</span>`;
                 } else if (shouldItalicize) {
-                    name = `<span class="italic">${name}</span>`;
+                    return `<span class="italic">${displayName}</span>`;
                 }
                 
-                return name;
-            }).join(', ');
+                return displayName;
+            }).filter(Boolean); // Remove any empty strings
             
-            html += namesList;
-            outputDiv.innerHTML = html;
-        });
+            // Build the output HTML
+            let result = '';
+            
+            // Add cosponsor count
+            if (democrats > 0 || republicans > 0) {
+                result += `<strong>(Cosponsors ${democrats}D, ${republicans}R):</strong> `;
+            }
+            
+            // Add the comma-separated list of names
+            result += formattedNames.join(', ');
+            
+            return result || 'No valid names to display.';
+        }
     </script>
     
     <div class="footer">
