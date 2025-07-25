@@ -5,109 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cosponsor Formatting Tool</title>
     <style>
-        body {
-            font-family: system-ui, Arial, sans-serif;
-            background: #fafbfc;
-            color: #222;
+        @font-face {
+            font-family: 'Avenir Next LT Pro Demi';
+            src: local('Avenir Next LT Pro Demi'), url('https://cdn.jsdelivr.net/npm/@fontsource/avenir-next@4.0.0/files/avenir-next-lt-pro-demi.woff2') format('woff2');
+            font-weight: 600;
+            font-style: normal;
+            font-display: swap;
+        }
+        
+        :root {
+            --primary: #4a6cf7;
+            --primary-dark: #3a5bd9;
+            --text: #16325C; /* Base text color */
+            --text-light: #16325C; /* Updated to match base color */
+            --text-lighter: #16325C; /* Updated to match base color */
+            --border: #e2e8f0;
+            --border-hover: #cbd5e0;
+            --bg-light: #ffffff; /* Changed to white */
+            --bg-section: #ffffff;
+            --section-header-bg: #DBE2F4;
+            font-family: 'Times New Roman', Times, serif;
+            color: var(--text);
+            --shadow: none; /* Removed shadow */
+            --radius: 0; /* Removed border radius */
+            --transition: all 0.2s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            min-height: 100vh;
         }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+        
         .container {
-            max-width: 600px;
-            margin: 48px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 16px #0001;
-            padding: 2.5em 2em 2em 2em;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
         }
+        
         h1 {
-            font-size: 2.1em;
-            margin: 0 0 0.7em 0;
+            color: var(--text);
             text-align: center;
+            margin: 0 0 2rem 0;
+            font-family: 'Avenir Next LT Pro Demi', 'Avenir', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 2.25rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 1rem 0;
         }
-        .instructions {
-            font-size: 1em;
-            color: #444;
-            margin-bottom: 1.5em;
-            background: #f6f6e7;
-            padding: 1em;
-            border-radius: 8px;
-            white-space: pre-line;
+        
+        /* Section Styles */
+        .section {
+            background-color: var(--bg-section);
+            border-radius: 0; /* Sharp corners */
+            box-shadow: none; /* No shadow */
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
-        textarea {
-            width: 100%;
-            min-height: 180px;
-            font-size: 1.1em;
-            padding: 1em;
-            border-radius: 8px;
-            border: 1px solid #bbb;
-            margin-bottom: 1em;
-            resize: vertical;
-            box-sizing: border-box;
+        
+        .section:last-child {
+            margin-bottom: 0;
         }
-        button {
-            display: block;
-            width: 100%;
-            font-size: 1.1em;
-            padding: 0.7em;
-            background: #2867c6;
-            color: #fff;
-            border: none;
-            border-radius: 8px;
+        
+        .section.no-collapse .section-header {
+            cursor: default;
+            padding-left: 1.5rem;
+            pointer-events: none; /* Prevent any click events on the header */
+        }
+        
+        .no-collapse .section-header::before {
+            display: none;
+        }
+        
+        /* Ensure the section content is always visible for non-collapsible sections */
+        .section.no-collapse .section-content {
+            display: block !important; /* Override any inline styles that might hide it */
+        }
+        
+        /* Section headers - all caps, bold, Times New Roman */
+        .section-header {
+            background-color: #DBE2F4; /* Light blue-gray background */
+            color: #16325C; /* Dark blue text */
+            padding: 0.75rem 1.5rem;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid #dee2e6;
+            border-bottom: none;
             cursor: pointer;
-            margin-bottom: 1.5em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        button:hover {
-            background: #184c90;
+        
+        /* Special style for Cosponsor List & Formatted Output header */
+        .section.no-collapse .section-header {
+            background-color: #16325C; /* Dark blue background */
+            color: white; /* White text */
         }
-        .output {
-            font-size: 1.2em;
-            margin-top: 1.5em;
-            word-break: break-word;
+        
+        .section-header {
+            position: relative;
+            padding-left: 2rem;
+            cursor: pointer;
         }
-        .italic {
-            font-style: italic;
+        
+        .section-header::before {
+            content: '▶';
+            font-size: 0.7em;
+            transition: transform 0.2s ease;
+            opacity: 0.8;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%) rotate(0deg);
         }
-        .highlight {
-            background: #ffff00; /* Bright yellow for better visibility */
-            border-radius: 4px;
+        
+        .section-header.expanded::before {
+            transform: translateY(-50%) rotate(90deg);
         }
-        .highlight-section {
-            background: #f0f8ff; /* Light blue background */
-            padding: 1em;
-            border-radius: 8px;
-            margin-bottom: 1.5em;
-            border: 1px solid #ddd;
+        
+        .section-content {
+            padding: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
         }
-        .highlight-section-yellow {
-            background: #fffacd; /* Light yellow background */
-            padding: 1em;
-            border-radius: 8px;
-            margin-bottom: 1.5em;
-            border: 1px solid #ddd;
+        
+        .section-content.collapsed {
+            display: none;
         }
         .dropdown-container {
             display: flex;
-            gap: 1em;
-            margin-top: 0.5em;
+            gap: 1rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
         }
+        
         .dropdown-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.3em;
+            flex: 1;
+            min-width: 200px;
         }
+        
         .dropdown-group label {
-            font-weight: bold;
-            font-size: 0.9em;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: normal;
+            color: var(--text-light);
+            font-size: 0.95rem;
         }
-        select {
-            padding: 0.5em;
-            border: 1px solid #bbb;
+        
+        /* Style for all select dropdowns */
+        .dropdown-group select, select {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0; /* Sharp corners */
+            background-color: #F1F4FF; /* Updated background color */
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+        
+        /* Style for textareas */
+        .dropdown-group textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            font-size: 1em;
-            min-width: 120px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            resize: vertical;
+            background-color: white;
+            color: var(--text);
+            margin-top: 0.5rem;
+        }
+        
+        .dropdown-group select option {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: var(--text);
+            padding: 8px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
         }
         .footer {
             position: fixed;
@@ -127,164 +225,875 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        
+        /* Formatting styles */
+        .highlight {
+            background-color: #fffbdd;
+            padding: 0.1em 0.2em;
+            border-radius: 3px;
+        }
+        
+        .italic {
+            font-style: italic;
+        }
+        
+        /* Output container styles */
+        #output {
+            min-height: 150px;
+            border: 1px solid var(--border);
+            border-radius: 0; /* Sharp corners */
+            padding: 1.25rem 1.5rem;
+            background: white;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12px;
+            line-height: 1.5;
+            color: var(--text);
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+        
+        .output-placeholder {
+            color: var(--text-lighter);
+            text-align: center;
+            padding: 1.5rem 0;
+            font-style: italic;
+        }
+        
+        /* Format Names button styles */
+        .submit-button {
+            display: block;
+            margin: 0 auto;
+            padding: 0.75rem 2rem;
+            background-color: #16325C; /* Dark blue background */
+            color: white;
+            border: none;
+            border-radius: 0; /* Sharp corners */
+            font-family: 'Avenir Next LT Pro Demi', 'Avenir', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.05em; /* Extra spacing between letters */
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-transform: uppercase; /* Ensure consistent casing */
+        }
+        
+        .submit-button:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Example format styling */
+        .example-format {
+            background-color: #f8fafc;
+            padding: 0.75rem;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 0.5rem 0 0;
+            border: 1px solid var(--border);
+            color: #16325C;
+        }
+        
+        /* Formatting options styling */
+        .formatting-option {
+            margin-bottom: 1.5rem;
+        }
+        
+        .formatting-option.highlight-option {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .option-title {
+            margin-top: 0;
+            font-size: 1rem;
+            color: #16325C;
+            font-style: italic;
+        }
+        
+        .option-description {
+            margin-top: 0;
+            font-size: 0.95rem;
+            color: #16325C;
+        }
+        
+        .highlight-title {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: #fffbdd;
+            color: #16325C !important;
+        }
+        
+        .highlighted {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: #fffbdd;
+            color: #16325C !important;
+        }
+        
+        .output-container {
+            position: relative;
+            margin-top: 0.5rem;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            min-height: 100px;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #f0f4f8;
+            border: 1px solid #cbd5e0;
+            border-radius: 0.25rem;
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #4a5568;
+            transition: all 0.2s ease;
+            z-index: 10;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .copy-button:hover {
+            background: #e2e8f0;
+        }
+        
+        .copy-button.copied {
+            background: #48bb78;
+            color: white;
+            border-color: #38a169;
+        }
     </style>
     <script src="https://cdn.counter.dev/script.js" data-id="91fcf8e8-fa60-40bf-851e-75466ee260b0" data-utcoffset="-4"></script>
 </head>
 <body>
     <div class="container">
         <h1>Cosponsor Formatting Tool</h1>
-        <div class="instructions">
-            <strong>Instructions:</strong><br>
-            On <b>congress.gov</b>, go to the cosponsor tab of a bill page.<br>
-            Copy and paste the list of cosponsors here.<br><br>
-            <b>Example:</b><br>
-            <pre style="background:#f6f6e7;border-radius:6px;padding:0.7em 1em;font-size:1em;overflow-x:auto;">
-Rep. Bilirakis, Gus M. [R-FL-12]*	01/31/2025
-Rep. Frost, Maxwell [D-FL-10]*	01/31/2025
-Rep. Castor, Kathy [D-FL-14]*	01/31/2025
-            </pre>
-        </div>
         
-        <!-- Italics Section -->
-        <div class="highlight-section">
-            <div style="font-weight: bold; margin-bottom: 0.5em;">Italics</div>
-            <div style="margin-bottom: 0.8em;">Select which party's names should be italicized:</div>
-            <div class="dropdown-container">
-                <div class="dropdown-group">
-                    <label for="italics-party-select">Italicize:</label>
-                    <select id="italics-party-select">
-                        <option value="">None</option>
-                        <option value="D">Democrats</option>
-                        <option value="R">Republicans</option>
-                    </select>
+        <!-- Instructions Section -->
+        <div class="section" id="instructions">
+            <div class="section-header">Instructions</div>
+            <div class="section-content">
+                <div class="instructions">
+                    <p>This website allows you to copy in a list of cosponsors from Congress.gov's Cosponsors tab or a Dear Colleague letter and returns a formatted list of names for a cosponsor memo.</p>
+                    <p>To use it, choose your preferred settings:</p>
+                    <ul style="margin-top: 0.5rem; margin-bottom: 1rem; padding-left: 1.5rem;">
+                        <li><strong>Italics:</strong> Which party (if any) you'd like to be italicized</li>
+                        <li><strong>Highlights:</strong> Which party and state (if any) you'd like to be highlighted</li>
+                        <li><strong>Duplicate Last Names:</strong> How you'd like duplicate last names formatted</li>
+                        <li><strong>Input Mode:</strong> If you'll be pasting text from Congress.gov or a Dear Colleague letter</li>
+                    </ul>
+                    <p>Your settings will be saved for future use and can be changed at any time.</p>
                 </div>
             </div>
         </div>
         
-        <!-- Highlight Section -->
-        <div class="highlight-section-yellow">
-            <div style="font-weight: bold; margin-bottom: 0.5em;">Highlight</div>
-            <div style="margin-bottom: 0.8em;">If you would like co-signers from your party and state highlighted in light yellow, select your party and state below. Otherwise, leave blank.</div>
-            <div class="dropdown-container">
-                <div class="dropdown-group">
-                    <label for="party-select">Party:</label>
-                    <select id="party-select">
-                        <option value="">Select Party</option>
-                        <option value="D">Democrat</option>
-                        <option value="R">Republican</option>
-                    </select>
+        <!-- Settings Section -->
+        <div class="section" id="settings">
+            <div class="section-header">Settings</div>
+            <div class="section-content">
+                <!-- Italics Section -->
+                <div class="formatting-option">
+                    <h3 class="option-title">Italics</h3>
+                    <p class="option-description">Select which party's names should be italicized:</p>
+                    <div class="dropdown-container">
+                        <div class="dropdown-group">
+                            <label for="italics-party-select">Italicize:</label>
+                            <select id="italics-party-select">
+                                <option value="">Select Party</option>
+                                <option value="D">Democrats</option>
+                                <option value="R">Republicans</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="dropdown-group">
-                    <label for="state-select">State:</label>
-                    <select id="state-select">
-                        <option value="">Select State</option>
-                        <option value="AL">Alabama (AL)</option>
-                        <option value="AK">Alaska (AK)</option>
-                        <option value="AS">American Samoa (AS)</option>
-                        <option value="AZ">Arizona (AZ)</option>
-                        <option value="AR">Arkansas (AR)</option>
-                        <option value="CA">California (CA)</option>
-                        <option value="CO">Colorado (CO)</option>
-                        <option value="CT">Connecticut (CT)</option>
-                        <option value="DE">Delaware (DE)</option>
-                        <option value="DC">District of Columbia (DC)</option>
-                        <option value="FL">Florida (FL)</option>
-                        <option value="GA">Georgia (GA)</option>
-                        <option value="GU">Guam (GU)</option>
-                        <option value="HI">Hawaii (HI)</option>
-                        <option value="ID">Idaho (ID)</option>
-                        <option value="IL">Illinois (IL)</option>
-                        <option value="IN">Indiana (IN)</option>
-                        <option value="IA">Iowa (IA)</option>
-                        <option value="KS">Kansas (KS)</option>
-                        <option value="KY">Kentucky (KY)</option>
-                        <option value="LA">Louisiana (LA)</option>
-                        <option value="ME">Maine (ME)</option>
-                        <option value="MD">Maryland (MD)</option>
-                        <option value="MA">Massachusetts (MA)</option>
-                        <option value="MI">Michigan (MI)</option>
-                        <option value="MN">Minnesota (MN)</option>
-                        <option value="MS">Mississippi (MS)</option>
-                        <option value="MO">Missouri (MO)</option>
-                        <option value="MT">Montana (MT)</option>
-                        <option value="NE">Nebraska (NE)</option>
-                        <option value="NV">Nevada (NV)</option>
-                        <option value="NH">New Hampshire (NH)</option>
-                        <option value="NJ">New Jersey (NJ)</option>
-                        <option value="NM">New Mexico (NM)</option>
-                        <option value="NY">New York (NY)</option>
-                        <option value="NC">North Carolina (NC)</option>
-                        <option value="ND">North Dakota (ND)</option>
-                        <option value="MP">Northern Mariana Islands (MP)</option>
-                        <option value="OH">Ohio (OH)</option>
-                        <option value="OK">Oklahoma (OK)</option>
-                        <option value="OR">Oregon (OR)</option>
-                        <option value="PA">Pennsylvania (PA)</option>
-                        <option value="PR">Puerto Rico (PR)</option>
-                        <option value="RI">Rhode Island (RI)</option>
-                        <option value="SC">South Carolina (SC)</option>
-                        <option value="SD">South Dakota (SD)</option>
-                        <option value="TN">Tennessee (TN)</option>
-                        <option value="TX">Texas (TX)</option>
-                        <option value="UT">Utah (UT)</option>
-                        <option value="VT">Vermont (VT)</option>
-                        <option value="VA">Virginia (VA)</option>
-                        <option value="VI">Virgin Islands (VI)</option>
-                        <option value="WA">Washington (WA)</option>
-                        <option value="WV">West Virginia (WV)</option>
-                        <option value="WI">Wisconsin (WI)</option>
-                        <option value="WY">Wyoming (WY)</option>
-                    </select>
+                
+                <!-- Highlight Section -->
+                <div class="formatting-option highlight-option">
+                    <h3 class="option-title highlight-title">Highlights</h3>
+                    <p class="option-description">Highlight co-signers from your party and state:</p>
+                    <div class="dropdown-container">
+                        <div class="dropdown-group">
+                            <label for="party-select">Party:</label>
+                            <select id="party-select">
+                                <option value="">Select Party</option>
+                                <option value="D">Democrat</option>
+                                <option value="R">Republican</option>
+                            </select>
+                        </div>
+                        <div class="dropdown-group">
+                            <label for="state-select">State:</label>
+                            <select id="state-select">
+                                <option value="">Select State</option>
+                                <option value="AL">Alabama (AL)</option>
+                                <option value="AK">Alaska (AK)</option>
+                                <option value="AZ">Arizona (AZ)</option>
+                                <option value="AR">Arkansas (AR)</option>
+                                <option value="CA">California (CA)</option>
+                                <option value="CO">Colorado (CO)</option>
+                                <option value="CT">Connecticut (CT)</option>
+                                <option value="DE">Delaware (DE)</option>
+                                <option value="FL">Florida (FL)</option>
+                                <option value="GA">Georgia (GA)</option>
+                                <option value="HI">Hawaii (HI)</option>
+                                <option value="ID">Idaho (ID)</option>
+                                <option value="IL">Illinois (IL)</option>
+                                <option value="IN">Indiana (IN)</option>
+                                <option value="IA">Iowa (IA)</option>
+                                <option value="KS">Kansas (KS)</option>
+                                <option value="KY">Kentucky (KY)</option>
+                                <option value="LA">Louisiana (LA)</option>
+                                <option value="ME">Maine (ME)</option>
+                                <option value="MD">Maryland (MD)</option>
+                                <option value="MA">Massachusetts (MA)</option>
+                                <option value="MI">Michigan (MI)</option>
+                                <option value="MN">Minnesota (MN)</option>
+                                <option value="MS">Mississippi (MS)</option>
+                                <option value="MO">Missouri (MO)</option>
+                                <option value="MT">Montana (MT)</option>
+                                <option value="NE">Nebraska (NE)</option>
+                                <option value="NV">Nevada (NV)</option>
+                                <option value="NH">New Hampshire (NH)</option>
+                                <option value="NJ">New Jersey (NJ)</option>
+                                <option value="NM">New Mexico (NM)</option>
+                                <option value="NY">New York (NY)</option>
+                                <option value="NC">North Carolina (NC)</option>
+                                <option value="ND">North Dakota (ND)</option>
+                                <option value="OH">Ohio (OH)</option>
+                                <option value="OK">Oklahoma (OK)</option>
+                                <option value="OR">Oregon (OR)</option>
+                                <option value="PA">Pennsylvania (PA)</option>
+                                <option value="RI">Rhode Island (RI)</option>
+                                <option value="SC">South Carolina (SC)</option>
+                                <option value="SD">South Dakota (SD)</option>
+                                <option value="TN">Tennessee (TN)</option>
+                                <option value="TX">Texas (TX)</option>
+                                <option value="UT">Utah (UT)</option>
+                                <option value="VT">Vermont (VT)</option>
+                                <option value="VA">Virginia (VA)</option>
+                                <option value="WA">Washington (WA)</option>
+                                <option value="WV">West Virginia (WV)</option>
+                                <option value="WI">Wisconsin (WI)</option>
+                                <option value="WY">Wyoming (WY)</option>
+                                <option value="">---</option>
+                                <option value="AS">American Samoa (AS)</option>
+                                <option value="DC">District of Columbia (DC)</option>
+                                <option value="GU">Guam (GU)</option>
+                                <option value="MP">Northern Mariana Islands (MP)</option>
+                                <option value="PR">Puerto Rico (PR)</option>
+                                <option value="VI">U.S. Virgin Islands (VI)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Duplicate Names Section -->
+                <div style="margin-bottom: 0.5rem;padding-top: 1.5rem;border-top: 1px solid #edf2f7;">
+                    <h3 style="margin-top: 0;color:#2d3748;font-size:1rem;">Duplicate Names</h3>
+                    <p style="margin-top: 0.5rem;color:#4a5568;font-size:0.9rem;">
+                        When duplicate names are found:
+                        <select id="duplicate-format" style="width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 0; background-color: #F1F4FF; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; color: var(--text); cursor: pointer; margin-top: 0.5rem;" onchange="saveSettings()">
+                            <option value="">Select Formatting</option>
+                            <option value="last">Last Name Only (e.g., "Biggs")</option>
+                            <option value="initial">First Initial + Last Name (e.g., "A. Biggs")</option>
+                            <option value="full">Full Name (e.g., "Andy Biggs")</option>
+                        </select>
+                    </p>
+                </div>
+
+                <!-- Input Mode Section -->
+                <div style="margin: 2rem 0 0.5rem 0; padding-top: 1.5rem; border-top: 1px solid #edf2f7;">
+                    <h3 style="margin-top: 0;color:#2d3748;font-size:1rem;">Input Mode</h3>
+                    <p style="margin: 0.75rem 0; color:#4a5568; font-size:0.9rem;">
+                        Select how you'll be pasting from:
+                        <select id="input-mode" class="input-mode-select" style="width: 100%; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 0; background-color: #F1F4FF; font-family: 'Times New Roman', Times, serif; font-size: 0.95rem; color: var(--text); cursor: pointer; margin-top: 0.5rem;">
+                            <option value="">Select Input</option>
+                            <option value="congress-gov">Congress.gov</option>
+                            <option value="last-names">Dear Colleague (list of last names)</option>
+                        </select>
+                    </p>
+
+                    <div style="margin-top: 1.5rem;">
+                        <a href="#" id="show-examples" style="color: #2b6cb0; text-decoration: underline; font-size: 0.9rem;">Not sure? Click here to see examples.</a>
+                        <div id="examples-container" style="display: none; margin-top: 1rem; border: 1px solid #e2e8f0; border-radius: 4px; padding: 1rem; font-family: 'Times New Roman', Times, serif;">
+                            <div style="margin-bottom: 1.5rem; background: #F1F4FF; padding: 1rem; border: 1px solid #d1d5db; border-radius: 4px;">
+                                <p style="margin: 0 0 0.5rem 0; font-weight: 600; color: #2d3748; font-size: 0.95rem;">Congress.gov Format</p>
+                                <div style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.5; background: white; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 4px;">
+<pre style="margin: 0; font-family: inherit;">Rep. Bilirakis, Gus M. [R-FL-12]*    01/31/2025
+Rep. Frost, Maxwell [D-FL-10]*       01/31/2025
+Rep. Castor, Kathy [D-FL-14]*        01/31/2025</pre>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem; background: #F1F4FF; padding: 1rem; border: 1px solid #d1d5db; border-radius: 4px;">
+                                <p style="margin: 0 0 0.5rem 0; font-weight: 600; color: #2d3748; font-size: 0.95rem;">Dear Colleague Format (Last Names Only)</p>
+                                <div style="font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.5; background: white; padding: 0.75rem; border: 1px solid #d1d5db; border-radius: 4px;">
+<pre style="margin: 0; font-family: inherit;">Smith, Johnson, Williams, Brown, 
+Jones, Garcia, Miller, Davis, 
+Rodriguez, Martinez, Hernandez, 
+Lopez, Gonzalez, Wilson, Anderson</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <form id="cosponsor-form">
-            <textarea id="input" placeholder="Paste your cosponsor list here..."></textarea>
-            <button type="submit">Format Names</button>
-        </form>
-        <div class="output" id="output"></div>
+
+
+        <!-- Combined Input/Output Section -->
+        <div class="section no-collapse">
+            <div class="section-header">Cosponsor List & Formatted Output</div>
+            <div class="section-content">
+                <form id="cosponsor-form" style="margin-bottom: 1.5rem;">
+                    <label for="input" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-light);">Paste your cosponsor list:</label>
+                    <textarea id="input" placeholder="Rep. LastName, FirstName [X-XX]..." style="width: 100%; min-height: 120px; margin-bottom: 1rem;"></textarea>
+                    <button type="submit" class="submit-button">Format Names</button>
+                </form>
+                
+                <!-- Ambiguous Names Selection Section -->
+                <div id="ambiguous-names-container" style="display: none; margin: 1.5rem 0; padding: 1.5rem; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px;">
+                    <h3 style="margin-top: 0; margin-bottom: 1rem; color: #16325C; font-size: 1.1rem;">There are some ambiguous last names.</h3>
+                    <p style="margin-top: 0; margin-bottom: 1rem; color: #555;">Select who you would like to be included:</p>
+                    <div id="ambiguous-names-list"></div>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <button id="finalize-button" class="submit-button" style="display: none;">CONFIRM</button>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <label style="font-weight: 500; color: var(--text-light);">Formatted Output:</label>
+                    </div>
+                    <div class="output-container">
+                        <button id="copy-button" class="copy-button">Copy</button>
+                        <div class="output" id="output" style="white-space: pre-wrap; font-family: monospace; min-height: 100px; background: transparent;">
+                            <div class="output-placeholder" style="color: #a0aec0;">
+                                Your formatted list will appear here
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <script>
+        // Format name based on duplicate format selection
+        function formatName(entry, format) {
+            if (!entry) return '';
+            
+            switch(format) {
+                case 'last':
+                    return entry.lastName || '';
+                case 'initial':
+                    const firstName = entry.firstName || '';
+                    return (firstName ? firstName.charAt(0) + '. ' : '') + (entry.lastName || '');
+                case 'full':
+                default:
+                    return [(entry.firstName || ''), (entry.lastName || '')].filter(Boolean).join(' ');
+            }
+        }
+
+        // Check if a name appears more than once in the representatives database
+        function isDuplicateName(entry) {
+            if (!entry || !entry.firstName || !entry.lastName) return false;
+            
+            const entryLastName = entry.lastName.toLowerCase();
+            
+            // Count how many times this last name appears in the database
+            const matchingLastNames = REPRESENTATIVES_DB.filter(rep => 
+                rep.lastName.toLowerCase() === entryLastName
+            );
+            
+            // If there's more than one representative with this last name, it's a duplicate
+            return matchingLastNames.length > 1;
+        }
+
+        // Global variable to track selected representatives
+        let selectedReps = new Set();
+        let currentAmbiguousRefs = {};
+        
+        // Toggle representative selection
+        function toggleRepSelection(repId, isChecked) {
+            if (isChecked) {
+                selectedReps.add(repId);
+            } else {
+                selectedReps.delete(repId);
+            }
+            // Don't update formatted output here - wait for FINALIZE button
+            // The checkbox change will be handled by the FINALIZE button click
+        }
+        
+        // Update the formatted output based on selected representatives
+        function updateFormattedOutput(forceUpdate = false) {
+            const namesText = document.getElementById('input').value;
+            const highlightParty = document.getElementById('party-select').value;
+            const highlightState = document.getElementById('state-select').value;
+            const italicsParty = document.querySelector('input[name="italics-party"]:checked')?.value || 'none';
+            const ambiguousContainer = document.getElementById('ambiguous-names-container');
+            const outputElement = document.getElementById('output');
+            
+            if (!outputElement) {
+                console.error('Output element not found');
+                return;
+            }
+            
+            // Only process if we have a valid input
+            if (!namesText.trim()) {
+                outputElement.innerHTML = '';
+                return;
+            }
+            
+            // Process the input to get the output and check for ambiguous names
+            const output = processLastNamesInput(namesText, highlightParty, highlightState, italicsParty);
+            
+            // If we have ambiguous names and we're not forcing an update, show the UI and don't update output yet
+            if (Object.keys(currentAmbiguousRefs).length > 0 && !forceUpdate) {
+                showAmbiguousNames(currentAmbiguousRefs);
+                return;
+            }
+            
+            // If we get here, either there are no ambiguous names or we're forcing an update
+            // Hide the ambiguous names container if it exists
+            if (ambiguousContainer) {
+                ambiguousContainer.style.display = 'none';
+            }
+            
+            // Hide the FINALIZE button if it exists
+            const finalizeButton = document.getElementById('finalize-button');
+            if (finalizeButton) {
+                finalizeButton.style.display = 'none';
+            }
+            
+            // Update the output with the processed result
+            outputElement.innerHTML = output || 'No valid names to process.';
+        }
+        
+        // Show ambiguous names selection UI
+        function showAmbiguousNames(ambiguousRefs) {
+            const container = document.getElementById('ambiguous-names-container');
+            const list = document.getElementById('ambiguous-names-list');
+            const finalizeButton = document.getElementById('finalize-button');
+            
+            if (!container || !list || !finalizeButton) {
+                console.error('Required elements not found');
+                return;
+            }
+            
+            if (Object.keys(ambiguousRefs).length === 0) {
+                container.style.display = 'none';
+                finalizeButton.style.display = 'none';
+                return;
+            }
+            
+            console.log('Showing ambiguous names:', ambiguousRefs);
+            
+            // Clear previous content
+            list.innerHTML = '';
+            
+            // Create a section for each ambiguous last name
+            for (const [lastName, reps] of Object.entries(ambiguousRefs)) {
+                const section = document.createElement('div');
+                section.style.marginBottom = '1.5rem';
+                
+                const subheader = document.createElement('div');
+                subheader.textContent = `${lastName}:`;
+                subheader.style.fontWeight = 'bold';
+                subheader.style.marginBottom = '0.5rem';
+                subheader.style.fontSize = '1rem';
+                
+                const checkboxContainer = document.createElement('div');
+                checkboxContainer.style.marginLeft = '1rem';
+                
+                // Create checkbox for each representative
+                reps.forEach(rep => {
+                    const repId = `${rep.party}-${rep.state}-${rep.district}`;
+                    const isChecked = selectedReps.has(repId);
+                    
+                    const label = document.createElement('label');
+                    label.style.display = 'flex';
+                    label.style.alignItems = 'center';
+                    label.style.marginBottom = '0.5rem';
+                    label.style.cursor = 'pointer';
+                    label.style.fontFamily = 'Times New Roman, serif';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.checked = isChecked;
+                    checkbox.style.marginRight = '0.5rem';
+                    checkbox.style.width = '1rem';
+                    checkbox.style.height = '1rem';
+                    checkbox.onchange = (e) => {
+                        toggleRepSelection(repId, e.target.checked);
+                        // Don't update the output immediately - wait for FINALIZE
+                    };
+                    
+                    const text = document.createTextNode(`${rep.firstName} ${rep.lastName} [${rep.party}-${rep.state}-${rep.district}]`);
+                    
+                    label.appendChild(checkbox);
+                    label.appendChild(text);
+                    checkboxContainer.appendChild(label);
+                });
+                
+                section.appendChild(subheader);
+                section.appendChild(checkboxContainer);
+                list.appendChild(section);
+            }
+            
+            // Show the container and FINALIZE button
+            container.style.display = 'block';
+            finalizeButton.style.display = 'inline-block';
+            
+            // Scroll to the ambiguous names section
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
         // Save settings to localStorage
         function saveSettings() {
+            try {
+                const inputModeSelect = document.querySelector('select.input-mode-select');
+                const settings = {
+                    italicsParty: document.getElementById('italics-party-select')?.value || '',
+                    highlightParty: document.getElementById('party-select')?.value || '',
+                    highlightState: document.getElementById('state-select')?.value || '',
+                    duplicateFormat: document.getElementById('duplicate-format')?.value || '',
+                    inputMode: inputModeSelect?.value || '',
+                    // Save collapsed state of sections
+                    collapsedSections: {
+                        instructions: document.querySelector('.section:not(.no-collapse) .section-header')?.classList?.contains('collapsed') || false,
+                        formattingOptions: (document.querySelectorAll('.section:not(.no-collapse) .section-header')[1]?.classList?.contains('collapsed')) || false
+                    }
+                };
+                localStorage.setItem('cosponsorFormatterSettings', JSON.stringify(settings));
+            } catch (e) {
+                console.error('Error saving settings:', e);
+            }
+        }
+
+        // Save settings to localStorage
+        function saveSettings() {
+            const inputModeSelect = document.querySelector('.input-mode-select');
             const settings = {
-                italicsParty: document.getElementById('italics-party-select').value,
-                highlightParty: document.getElementById('party-select').value,
-                highlightState: document.getElementById('state-select').value
+                italicsParty: document.getElementById('italics-party-select')?.value || '',
+                highlightParty: document.getElementById('party-select')?.value || '',
+                highlightState: document.getElementById('state-select')?.value || '',
+                duplicateFormat: document.getElementById('duplicate-format')?.value || '',
+                inputMode: inputModeSelect?.value || ''
             };
-            localStorage.setItem('cosponsorToolSettings', JSON.stringify(settings));
+            localStorage.setItem('cosponsorFormatterSettings', JSON.stringify(settings));
         }
 
         // Load settings from localStorage
         function loadSettings() {
             try {
-                const settings = JSON.parse(localStorage.getItem('cosponsorToolSettings') || '{}');
-                if (settings.italicsParty) {
-                    document.getElementById('italics-party-select').value = settings.italicsParty;
-                }
-                if (settings.highlightParty) {
-                    document.getElementById('party-select').value = settings.highlightParty;
-                }
-                if (settings.highlightState) {
-                    document.getElementById('state-select').value = settings.highlightState;
+                const savedSettings = localStorage.getItem('cosponsorFormatterSettings');
+                
+                // Safely set values only if elements exist
+                const italicsSelect = document.getElementById('italics-party-select');
+                const partySelect = document.getElementById('party-select');
+                const stateSelect = document.getElementById('state-select');
+                const duplicateFormatSelect = document.getElementById('duplicate-format');
+                const inputModeSelect = document.querySelector('select.input-mode-select');
+                
+                // Initialize settings object
+                const settings = savedSettings ? JSON.parse(savedSettings) : {};
+                
+                // Set default values first
+                if (duplicateFormatSelect) duplicateFormatSelect.value = ''; // This will select the first option with empty value
+                if (inputModeSelect) inputModeSelect.value = ''; // Ensure input mode starts with default
+                
+                // Load saved settings if they exist
+                if (settings.italicsParty && italicsSelect) italicsSelect.value = settings.italicsParty;
+                if (settings.highlightParty && partySelect) partySelect.value = settings.highlightParty;
+                if (settings.highlightState && stateSelect) stateSelect.value = settings.highlightState;
+                if (settings.duplicateFormat && duplicateFormatSelect) duplicateFormatSelect.value = settings.duplicateFormat;
+                if (settings.inputMode && inputModeSelect) inputModeSelect.value = settings.inputMode;
+                
+                // Load collapsed state of sections
+                if (settings.collapsedSections) {
+                    const sections = document.querySelectorAll('.section:not(.no-collapse)');
+                    
+                    // Instructions section
+                    if (sections[0]) {
+                        const header = sections[0].querySelector('.section-header');
+                        const content = sections[0].querySelector('.section-content');
+                        if (header && content) {
+                            if (settings.collapsedSections.instructions) {
+                                header.classList.add('collapsed');
+                                content.classList.add('collapsed');
+                            } else {
+                                header.classList.remove('collapsed');
+                                content.classList.remove('collapsed');
+                            }
+                        }
+                    }
+                    
+                    // Formatting options section
+                    if (sections[1]) {
+                        const header = sections[1].querySelector('.section-header');
+                        const content = sections[1].querySelector('.section-content');
+                        if (header && content) {
+                            if (settings.collapsedSections.formattingOptions) {
+                                header.classList.add('collapsed');
+                                content.classList.add('collapsed');
+                            } else {
+                                header.classList.remove('collapsed');
+                                content.classList.remove('collapsed');
+                            }
+                        }
+                    }
                 }
             } catch (e) {
                 console.error('Error loading settings:', e);
                 // Clear corrupted settings
-                localStorage.removeItem('cosponsorToolSettings');
+                localStorage.removeItem('cosponsorFormatterSettings');
             }
         }
 
-        // Add event listeners for saving settings when dropdowns change
+        // Add copy button functionality with rich text support
+        function setupCopyButton() {
+            const copyButton = document.getElementById('copy-button');
+            const output = document.getElementById('output');
+            
+            copyButton.addEventListener('click', async function(e) {
+                e.preventDefault();
+                
+                try {
+                    // Create a temporary div to hold the content with styles
+                    const tempDiv = document.createElement('div');
+                    
+                    // Clone the output content
+                    const content = output.cloneNode(true);
+                    
+                    // Create a style element with our CSS
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        body, div, span, p, a, h1, h2, h3, h4, h5, h6, li, td, th, input, textarea, select, option, button, label, legend, fieldset, caption, tbody, tfoot, thead, tr {
+                            font-family: 'Times New Roman', Times, serif !important;
+                            font-size: 11pt !important;
+                            line-height: 1.15 !important;
+                            color: #000000 !important;
+                        }
+                        .highlight {
+                            background-color: #FFFF00 !important; /* Bright yellow */
+                            color: #000000 !important;
+                            display: inline !important;
+                            padding: 0.1em 0.2em !important;
+                            mso-highlight: yellow; /* For better Word compatibility */
+                        }
+                        .italic {
+                            font-style: italic !important;
+                        }
+                        strong, b {
+                            font-weight: bold !important;
+                        }
+                    `;
+                    
+                    // Add the style to our temp div
+                    tempDiv.appendChild(style);
+                    tempDiv.appendChild(content);
+                    
+                    // Add the temp div to the document (but keep it hidden)
+                    tempDiv.style.position = 'fixed';
+                    tempDiv.style.left = '-9999px';
+                    document.body.appendChild(tempDiv);
+                    
+                    // Select the content
+                    const range = document.createRange();
+                    range.selectNodeContents(tempDiv);
+                    
+                    // Clear any existing selection
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    
+                    // Execute the copy command
+                    const successful = document.execCommand('copy');
+                    
+                    // Clean up
+                    selection.removeAllRanges();
+                    document.body.removeChild(tempDiv);
+                    
+                    if (successful) {
+                        // Change button to indicate success
+                        const originalText = copyButton.textContent;
+                        copyButton.textContent = 'Copied!';
+                        copyButton.classList.add('copied');
+                        
+                        // Reset button after 2 seconds
+                        setTimeout(() => {
+                            copyButton.textContent = originalText;
+                            copyButton.classList.remove('copied');
+                        }, 2000);
+                    } else {
+                        throw new Error('Copy command failed');
+                    }
+                } catch (err) {
+                    console.error('Failed to copy text with formatting: ', err);
+                    
+                    // Fallback to plain text copy if rich text copy fails
+                    try {
+                        await navigator.clipboard.writeText(output.textContent.trim());
+                        copyButton.textContent = 'Copied!';
+                        copyButton.classList.add('copied');
+                    } catch (err2) {
+                        console.error('Failed to copy plain text: ', err2);
+                        copyButton.textContent = 'Failed to copy';
+                        copyButton.classList.add('copied');
+                    }
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(() => {
+                        copyButton.textContent = 'Copy';
+                        copyButton.classList.remove('copied');
+                    }, 2000);
+                }
+            });
+            
+            // Also handle Ctrl+C when the output is focused
+            output.addEventListener('copy', function(e) {
+                e.preventDefault();
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
+                
+                // Clone the selection to modify it
+                const clonedSelection = range.cloneContents();
+                
+                // Create a temporary div to hold the content with styles
+                const tempDiv = document.createElement('div');
+                tempDiv.appendChild(clonedSelection);
+                
+                // Add the HTML and plain text to clipboard
+                e.clipboardData.setData('text/html', tempDiv.innerHTML);
+                e.clipboardData.setData('text/plain', selection.toString());
+            });
+        }
+        
+        // Toggle examples visibility
+        function toggleExamples() {
+            const container = document.getElementById('examples-container');
+            const link = document.getElementById('show-examples');
+            if (container.style.display === 'none' || !container.style.display) {
+                container.style.display = 'block';
+                link.textContent = 'Hide examples';
+            } else {
+                container.style.display = 'none';
+                link.textContent = 'Not sure? Click here to see examples.';
+            }
+        }
+
+        // Add collapsible functionality to sections
         document.addEventListener('DOMContentLoaded', function() {
             // Load saved settings
             loadSettings();
             
+            // Setup examples toggle
+            const showExamplesLink = document.getElementById('show-examples');
+            if (showExamplesLink) {
+                showExamplesLink.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    toggleExamples();
+                });
+            }
+            
+            // Setup copy button
+            setupCopyButton();
+            
+            // Setup FINALIZE button
+            const finalizeButton = document.getElementById('finalize-button');
+            if (finalizeButton) {
+                finalizeButton.addEventListener('click', function() {
+                    // Hide the ambiguous names container and FINALIZE button
+                    const container = document.getElementById('ambiguous-names-container');
+                    if (container) {
+                        container.style.display = 'none';
+                    }
+                    finalizeButton.style.display = 'none';
+                    updateFormattedOutput();
+                });
+            }
+            
+            // Get all sections for collapsible functionality
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                const header = section.querySelector('.section-header');
+                const content = section.querySelector('.section-content');
+                
+                if (!header || !content) return;
+                
+                // Initialize all sections as expanded by default
+                header.classList.add('expanded');
+                content.style.display = 'block';
+                
+                // Load section state from localStorage
+                const sectionId = section.id || header.textContent.trim().toLowerCase().replace(/\s+/g, '-');
+                const sectionState = localStorage.getItem(`section-${sectionId}`);
+                
+                if (sectionState === 'collapsed') {
+                    header.classList.remove('expanded');
+                    content.style.display = 'none';
+                }
+                
+                // Add click event to header
+                header.addEventListener('click', function() {
+                    const isExpanded = this.classList.contains('expanded');
+                    const content = this.nextElementSibling;
+                    
+                    if (isExpanded) {
+                        this.classList.remove('expanded');
+                        content.style.display = 'none';
+                        localStorage.setItem(`section-${sectionId}`, 'collapsed');
+                    } else {
+                        this.classList.add('expanded');
+                        content.style.display = 'block';
+                        localStorage.setItem(`section-${sectionId}`, 'expanded');
+                    }
+                });
+            });
+            
+            // Load saved settings
+            
             // Add change event listeners to all dropdowns
-            document.getElementById('italics-party-select').addEventListener('change', saveSettings);
-            document.getElementById('party-select').addEventListener('change', saveSettings);
-            document.getElementById('state-select').addEventListener('change', saveSettings);
+            const italicsPartySelect = document.getElementById('italics-party-select');
+            const partySelect = document.getElementById('party-select');
+            const stateSelect = document.getElementById('state-select');
+            const duplicateFormatSelect = document.getElementById('duplicate-format');
+            
+            // Add change event listeners to all dropdowns
+            const inputModeSelect = document.querySelector('.input-mode-select');
+            const cosponsorInput = document.getElementById('cosponsor-input');
+            
+            // Function to clear placeholder text
+            function updatePlaceholder() {
+                if (cosponsorInput) {
+                    cosponsorInput.placeholder = '';
+                }
+            }
+            
+            // Set up event listeners with proper function references
+            if (italicsPartySelect) italicsPartySelect.addEventListener('change', saveSettings);
+            if (partySelect) partySelect.addEventListener('change', saveSettings);
+            if (stateSelect) stateSelect.addEventListener('change', saveSettings);
+            if (duplicateFormatSelect) duplicateFormatSelect.addEventListener('change', saveSettings);
+            
+            // Handle input mode changes
+            if (inputModeSelect) {
+                // Remove the inline onchange handler since we're using addEventListener
+                inputModeSelect.removeAttribute('onchange');
+                
+                inputModeSelect.addEventListener('change', function() {
+                    saveSettings();
+                    updatePlaceholder();
+                    // Clear the input when changing modes
+                    if (cosponsorInput) {
+                        cosponsorInput.value = '';
+                    }
+                });
+                
+                // Initialize placeholder on page load
+                updatePlaceholder();
+            }
         });
 
         function parseCongressGovEntries(text) {
@@ -323,12 +1132,15 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
                     state = bracketMatch[2];
                 }
                 
-                // Extract last name (everything before the first comma)
-                const lastName = cleanName.split(',')[0].trim();
+                // Extract name parts
+                const nameParts = cleanName.split(',');
+                const lastName = nameParts[0].trim();
+                const firstName = nameParts[1]?.trim() || '';
                 
                 if (lastName) {
                     entries.push({
                         lastName,
+                        firstName,
                         fullName: cleanName,
                         party,
                         state,
@@ -340,59 +1152,384 @@ Rep. Castor, Kathy [D-FL-14]*	01/31/2025
             return entries;
         }
 
-        document.getElementById('cosponsor-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const input = document.getElementById('input').value;
-            const entries = parseCongressGovEntries(input);
-            
-            // Get selected options from dropdowns
-            const italicsParty = document.getElementById('italics-party-select').value;
-            const highlightParty = document.getElementById('party-select').value;
-            const highlightState = document.getElementById('state-select').value;
-            
-            const outputDiv = document.getElementById('output');
-            if (entries.length === 0) {
-                outputDiv.innerHTML = '<span style="color:#888">No valid names found.</span>';
+
+        
+        // Set up form submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('cosponsor-form');
+            if (!form) {
+                console.error('Form element not found');
                 return;
             }
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                console.log('Form submitted');
+                const inputText = document.getElementById('input').value.trim();
+                const outputElement = document.querySelector('.output');
+                const inputModeSelect = document.querySelector('select.input-mode-select');
+                
+                if (!inputModeSelect) {
+                    console.error('Input mode select not found');
+                    return;
+                }
+                
+                const inputMode = inputModeSelect.value;
+                
+                console.log('Input text:', inputText);
+                console.log('Input mode:', inputMode);
+                
+                if (!inputText) {
+                    console.log('No input text');
+                    outputElement.innerHTML = '<div style="color:#e53e3e;text-align:center;padding:1rem;">Please enter some text to format.</div>';
+                    return;
+                }
+                
+                const highlightParty = document.getElementById('party-select').value;
+                const highlightState = document.getElementById('state-select').value;
+                const italicsPartySelect = document.getElementById('italics-party-select');
+                const italicsParty = italicsPartySelect ? italicsPartySelect.value : '';
+                
+                let formatted = '';
+                
+                if (inputMode === 'last-names') {
+                    // Process as comma-separated last names
+                    formatted = processLastNamesInput(inputText, highlightParty, highlightState, italicsParty);
+                    
+                    // If we have ambiguous names, show the selection UI
+                    if (Object.keys(currentAmbiguousRefs).length > 0) {
+                        showAmbiguousNames(currentAmbiguousRefs);
+                    }
+                } else {
+                    // Process as Congress.gov format
+                    const entries = parseCongressGovEntries(inputText);
+                    console.log('Parsed entries:', entries);
+                    
+                    if (!entries || entries.length === 0) {
+                        console.log('No valid entries found');
+                        outputElement.innerHTML = '<div style="color:#e53e3e;text-align:center;padding:1rem;">No valid entries found. Please check your input format.</div>';
+                        return;
+                    }
+                    
+                    formatted = formatNamesGrouped(entries, highlightParty, highlightState, italicsParty);
+                }
+                
+                console.log('Formatted output:', formatted);
+                outputElement.innerHTML = formatted || '<div style="color:#4a5568;text-align:center;padding:1rem;">No results to display.</div>';
+                
+                // Save settings
+                saveSettings();
+            });
+        });
+        
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved settings
+            loadSettings();
             
-            // Sort alphabetically by last name
-            entries.sort((a, b) => a.lastName.localeCompare(b.lastName));
+            // Set up event listeners for settings changes
+            const settingsInputs = [
+                'italics-party-select',
+                'duplicate-format-select',
+                'party-select',
+                'state-select'
+            ];
             
-            // Count party affiliations
-            const democrats = entries.filter(e => e.party === 'D').length;
-            const republicans = entries.filter(e => e.party === 'R').length;
+            settingsInputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', saveSettings);
+                }
+            });
             
-            // Generate output
-            let html = '';
+            // Set up collapsible sections
+            const sections = document.querySelectorAll('.section:not(.no-collapse)');
+            sections.forEach((section) => {
+                const header = section.querySelector('.section-header');
+                const content = section.querySelector('.section-content');
+                
+                if (header && content) {
+                    // Add click handler
+                    header.addEventListener('click', () => {
+                        header.classList.toggle('collapsed');
+                        content.classList.toggle('collapsed');
+                        // Save the new state
+                        saveSettings();
+                    });
+                }
+            });
             
-            // Add cosponsor tally
-            if (democrats > 0 || republicans > 0) {
-                html += `<strong>(Cosponsors ${democrats}D, ${republicans}R):</strong> `;
+            // Focus the input field when the page loads
+            const inputField = document.getElementById('input');
+            if (inputField) {
+                inputField.focus();
+            }
+        });
+        
+        // Representative database for name lookups
+        const REPRESENTATIVES_DB = [
+            // Format: { firstName: 'First', lastName: 'Last', party: 'D/R', state: 'XX', district: '0' }
+            // Added representatives based on user's example and common names
+            { firstName: 'Earl', lastName: 'Carter', party: 'R', state: 'GA', district: '1' },
+            { firstName: 'John', lastName: 'Carter', party: 'R', state: 'TX', district: '31' },
+            { firstName: 'Troy', lastName: 'Carter', party: 'D', state: 'LA', district: '2' },
+            { firstName: 'Andy', lastName: 'Biggs', party: 'R', state: 'AZ', district: '5' },
+            { firstName: 'Gus', lastName: 'Bilirakis', party: 'R', state: 'FL', district: '12' },
+            { firstName: 'Vern', lastName: 'Buchanan', party: 'R', state: 'FL', district: '16' },
+            { firstName: 'Pete', lastName: 'Aguilar', party: 'D', state: 'CA', district: '33' },
+            { firstName: 'Diana', lastName: 'DeGette', party: 'D', state: 'CO', district: '1' },
+            { firstName: 'Dan', lastName: 'Goldman', party: 'D', state: 'NY', district: '10' },
+            { firstName: 'Craig', lastName: 'Goldman', party: 'R', state: 'TX', district: '12' },
+            { firstName: 'Darrell', lastName: 'Issa', party: 'R', state: 'CA', district: '48' },
+            { firstName: 'Bobby', lastName: 'Scott', party: 'D', state: 'VA', district: '3' },
+            { firstName: 'Austin', lastName: 'Scott', party: 'R', state: 'GA', district: '8' },
+            { firstName: 'David', lastName: 'Scott', party: 'D', state: 'GA', district: '13' },
+            { firstName: 'Jimmy', lastName: 'Panetta', party: 'D', state: 'CA', district: '19' },
+            { firstName: 'Nancy', lastName: 'Pelosi', party: 'D', state: 'CA', district: '11' },
+            { firstName: 'Katie', lastName: 'Porter', party: 'D', state: 'CA', district: '47' },
+            { firstName: 'Adam', lastName: 'Schiff', party: 'D', state: 'CA', district: '30' },
+            { firstName: 'Brad', lastName: 'Sherman', party: 'D', state: 'CA', district: '32' },
+            { firstName: 'Mike', lastName: 'Thompson', party: 'D', state: 'CA', district: '4' },
+            { firstName: 'Norma', lastName: 'Torres', party: 'D', state: 'CA', district: '35' },
+            { firstName: 'Juan', lastName: 'Vargas', party: 'D', state: 'CA', district: '52' },
+            { firstName: 'Don', lastName: 'Davis', party: 'D', state: 'NC', district: '1' },
+            { firstName: 'Danny', lastName: 'Davis', party: 'D', state: 'IL', district: '7' }
+        ];
+
+        // Find representatives by last name (case-insensitive, matches only as last name)
+        function findRepresentativesByLastName(lastName) {
+            if (!lastName) return [];
+            const lowerLastName = lastName.toLowerCase().trim();
+            return REPRESENTATIVES_DB.filter(rep => 
+                rep.lastName.toLowerCase() === lowerLastName
+            );
+        }
+
+        // Process a list of last names and return formatted output with ambiguous references
+        function processLastNamesInput(namesText, highlightParty, highlightState, italicsParty) {
+            const lastNames = namesText.split(',').map(name => name.trim()).filter(Boolean);
+            let allMatches = [];
+            const ambiguousRefs = {};
+            const processedLastNames = new Set();
+            const notFoundNames = [];
+            
+            // Clear any previous ambiguous selections
+            currentAmbiguousRefs = {};
+            
+            // First pass: find all matches and track ambiguous names
+            lastNames.forEach(lastName => {
+                const lowerLastName = lastName.toLowerCase();
+                if (processedLastNames.has(lowerLastName)) return; // Skip duplicates
+                processedLastNames.add(lowerLastName);
+                
+                const matches = findRepresentativesByLastName(lastName);
+                console.log(`Processing ${lastName}:`, matches);
+                
+                if (matches.length === 0) {
+                    // No matches found for this last name
+                    notFoundNames.push(lastName);
+                    return;
+                }
+                
+                if (matches.length === 1) {
+                    // Single match - check if it's a duplicate name
+                    const rep = matches[0];
+                    if (isDuplicateName(rep)) {
+                        // This is a duplicate name, add to ambiguous refs
+                        if (!ambiguousRefs[lastName]) {
+                            ambiguousRefs[lastName] = [rep];
+                            currentAmbiguousRefs[lastName] = [rep];
+                            
+                            // Add any previously selected representatives for this last name
+                            const repId = `${rep.party}-${rep.state}-${rep.district}`;
+                            if (selectedReps.has(repId)) {
+                                allMatches.push(rep);
+                            }
+                        }
+                    } else {
+                        // Not a duplicate, add to results
+                        allMatches.push(rep);
+                    }
+                } else if (matches.length > 1) {
+                    // Multiple matches - track for ambiguous references
+                    // Only add to ambiguousRefs if not already there
+                    if (!ambiguousRefs[lastName]) {
+                        ambiguousRefs[lastName] = matches;
+                        currentAmbiguousRefs[lastName] = matches;
+                        
+                        // Add any previously selected representatives for this last name
+                        matches.forEach(rep => {
+                            const repId = `${rep.party}-${rep.state}-${rep.district}`;
+                            if (selectedReps.has(repId)) {
+                                allMatches.push(rep);
+                            }
+                        });
+                    }
+                }
+            });
+            
+            console.log('All matches:', allMatches);
+            console.log('Ambiguous refs:', ambiguousRefs);
+            
+            // If we have ambiguous names, show the selection UI
+            if (Object.keys(ambiguousRefs).length > 0) {
+                showAmbiguousNames(ambiguousRefs);
+                
+                // If no selections made yet and no unambiguous matches, return empty string
+                if (allMatches.length === 0) {
+                    return notFoundNames.length > 0 ? 
+                        `No matches found for: ${notFoundNames.join(', ')}` : 
+                        'No matches found.';
+                }
+                
+                // Return early to wait for FINALIZE button click
+                return '';
+            } else {
+                // Hide the ambiguous names container and FINALIZE button if no ambiguous names
+                const container = document.getElementById('ambiguous-names-container');
+                const finalizeButton = document.getElementById('finalize-button');
+                if (container) container.style.display = 'none';
+                if (finalizeButton) finalizeButton.style.display = 'none';
+                
+                // If no matches found at all, return a helpful message
+                if (allMatches.length === 0 && notFoundNames.length > 0) {
+                    return `No matches found for: ${notFoundNames.join(', ')}`;
+                }
             }
             
-            // Generate the alphabetized list of last names
-            const namesList = entries.map(entry => {
-                let name = entry.lastName;
+            // Process all matches for party counting and tracking
+            const formattedEntries = [];
+            const allFormattedNames = [];
+            
+            // Process all matches
+            allMatches.forEach(rep => {
+                // Save all entries for party counting
+                formattedEntries.push({
+                    name: rep.lastName,
+                    lastName: rep.lastName,
+                    party: rep.party,
+                    state: rep.state,
+                    district: rep.district
+                });
+                
+                // Check if this rep should be highlighted or italicized
+                const shouldHighlight = highlightParty && highlightState && 
+                                     rep.party === highlightParty && 
+                                     rep.state === highlightState;
+                const shouldItalicize = italicsParty && rep.party === italicsParty;
+                
+                // Get the duplicate format setting
+                const duplicateFormat = document.getElementById('duplicate-format').value;
+                let displayName = rep.lastName; // Default to last name only
+                
+                // Format the name based on the duplicate format setting
+                if (duplicateFormat === 'initial') {
+                    const firstName = rep.firstName || '';
+                    displayName = (firstName ? firstName.charAt(0) + '. ' : '') + (rep.lastName || '');
+                } else if (duplicateFormat === 'full') {
+                    displayName = [(rep.firstName || ''), (rep.lastName || '')].filter(Boolean).join(' ');
+                }
+                
+                // Apply formatting
+                let formattedName = displayName;
+                
+                if (shouldHighlight) {
+                    formattedName = `<span class="highlight">${formattedName}</span>`;
+                }
+                
+                if (shouldItalicize) {
+                    formattedName = formattedName.includes('highlight') ? 
+                        formattedName.replace('>', ' style="font-style: italic;">') :
+                        `<span class="italic">${formattedName}</span>`;
+                }
+                
+                allFormattedNames.push({
+                    name: displayName,
+                    formattedName: formattedName,
+                    lastName: rep.lastName
+                });
+            });
+            
+            // Count parties from all matches
+            const democrats = formattedEntries.filter(e => e.party === 'D').length;
+            const republicans = formattedEntries.filter(e => e.party === 'R').length;
+            
+            // Sort by last name, then by full name for consistent ordering
+            allFormattedNames.sort((a, b) => {
+                if (a.lastName.toLowerCase() === b.lastName.toLowerCase()) {
+                    return a.name.localeCompare(b.name);
+                }
+                return a.lastName.localeCompare(b.lastName);
+            });
+            
+            // Extract just the formatted names for output
+            const formattedNames = allFormattedNames.map(entry => entry.formattedName);
+            
+            // Generate output
+            let output = '';
+            
+            // Add cosponsor count
+            if (democrats > 0 || republicans > 0) {
+                output += `<strong>Cosponsors (${democrats}D, ${republicans}R):</strong> `;
+            }
+            
+            // Add formatted names (already deduplicated and formatted)
+            output += formattedNames.join(', ');
+            
+            return output || 'No valid names to process.';
+        }
+
+        // Format names in a flat, comma-separated list
+        function formatNamesGrouped(entries, highlightParty, highlightState, italicsParty) {
+            if (!entries || entries.length === 0) return 'No valid names to display.';
+            
+            // Sort entries by last name
+            const sortedEntries = [...entries].sort((a, b) => a.lastName.localeCompare(b.lastName));
+            
+            // Count party affiliations
+            const democrats = sortedEntries.filter(e => e.party === 'D').length;
+            const republicans = sortedEntries.filter(e => e.party === 'R').length;
+            
+            // Generate the list of formatted names
+            const formattedNames = sortedEntries.map(entry => {
+                if (!entry || !entry.lastName) return '';
+                
+                // Check if this is a duplicate name that needs special formatting
+                const isDuplicate = isDuplicateName(entry);
+                let displayName = isDuplicate ? 
+                    formatName(entry, document.getElementById('duplicate-format-select')?.value || 'last') : 
+                    entry.lastName;
                 
                 // Check if this entry should be highlighted or italicized
                 const shouldHighlight = highlightParty && highlightState && 
-                    entry.party === highlightParty && entry.state === highlightState;
+                                     entry.party === highlightParty && 
+                                     entry.state === highlightState;
                 const shouldItalicize = italicsParty && entry.party === italicsParty;
                 
                 // Apply styling based on priority: highlight > italic
                 if (shouldHighlight) {
-                    name = `<span class="highlight">${name}</span>`;
+                    return `<span class="highlight">${displayName}</span>`;
                 } else if (shouldItalicize) {
-                    name = `<span class="italic">${name}</span>`;
+                    return `<span class="italic">${displayName}</span>`;
                 }
                 
-                return name;
-            }).join(', ');
+                return displayName;
+            }).filter(Boolean); // Remove any empty strings
             
-            html += namesList;
-            outputDiv.innerHTML = html;
-        });
+            // Build the output HTML
+            let result = '';
+            
+            // Add cosponsor count
+            if (democrats > 0 || republicans > 0) {
+                result += `<strong>(Cosponsors ${democrats}D, ${republicans}R):</strong> `;
+            }
+            
+            // Add the comma-separated list of names
+            result += formattedNames.join(', ');
+            
+            return result || 'No valid names to display.';
+        }
     </script>
     
     <div class="footer">
